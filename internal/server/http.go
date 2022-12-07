@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"ever-book/app/router"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -15,6 +16,8 @@ var r *gin.Engine
 
 func Run() {
 	r = gin.New()
+
+	router.Load(r)
 
 	srv := http.Server{
 		Addr:         ":8888",
