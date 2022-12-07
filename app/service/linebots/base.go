@@ -4,6 +4,7 @@ import (
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 	"log"
 	"net/http"
+	"os"
 	"sync"
 )
 
@@ -26,9 +27,12 @@ func NewService() Interface {
 
 func (s *service) GetClient() *linebot.Client {
 	var err error
-	bot, err = linebot.New("", "", linebot.WithHTTPClient(&http.Client{}))
+	bot, err = linebot.New(
+		os.Getenv("CHANNEL_SECRET"),
+		os.Getenv("CHANNEL_TOKEN"),
+		linebot.WithHTTPClient(&http.Client{}))
 	if err != nil {
-		log.Fatalf("New LineBot Error" + err.Error())
+		log.Fatalf("[❌ Fatal ❌] New LineBot Error" + err.Error())
 	}
 	return bot
 }
