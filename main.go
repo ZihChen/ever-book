@@ -1,5 +1,7 @@
 package main
 
-func main() {
+import "ever-book/internal/server"
 
+func main() {
+	server.Run()
 }
