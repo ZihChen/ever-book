@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "ever-book/docs"
 	"ever-book/internal/database"
 	"ever-book/internal/server"
 )
