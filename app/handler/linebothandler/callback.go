@@ -1,4 +1,4 @@
-package lineboth
+package linebothandler
 
 import "github.com/gin-gonic/gin"
 

@@ -1,8 +1,8 @@
-package users
+package userservice
 
 import (
 	"ever-book/app/model"
-	"ever-book/app/repository/userr"
+	"ever-book/app/repository/userrepo"
 	"sync"
 )
 
@@ -11,16 +11,16 @@ type Interface interface {
 }
 
 type service struct {
-	UserRepo userr.Interface
+	UserRepo userrepo.Interface
 }
 
 var singleton *service
 var once sync.Once
 
-func NewService() Interface {
+func New() Interface {
 	once.Do(func() {
 		singleton = &service{
-			UserRepo: userr.NewRepository(),
+			UserRepo: userrepo.New(),
 		}
 	})
 	return singleton

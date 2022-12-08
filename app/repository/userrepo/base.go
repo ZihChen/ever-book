@@ -1,4 +1,4 @@
-package userr
+package userrepo
 
 import (
 	"ever-book/app/model"
@@ -19,7 +19,7 @@ type repository struct {
 var singleton *repository
 var once sync.Once
 
-func NewRepository() Interface {
+func New() Interface {
 	once.Do(func() {
 		singleton = &repository{
 			DB: database.New(),

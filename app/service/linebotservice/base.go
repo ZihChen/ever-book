@@ -1,4 +1,4 @@
-package linebots
+package linebotservice
 
 import (
 	"github.com/line/line-bot-sdk-go/v7/linebot"
@@ -18,7 +18,7 @@ var bot *linebot.Client
 var singleton *service
 var once sync.Once
 
-func NewService() Interface {
+func New() Interface {
 	once.Do(func() {
 		singleton = &service{}
 	})

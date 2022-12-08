@@ -1,11 +1,11 @@
 package router
 
 import (
-	"ever-book/app/handler/lineboth"
+	"ever-book/app/handler/linebothandler"
 	"github.com/gin-gonic/gin"
 )
 
 func Load(r *gin.Engine) {
-	lineBotHandler := lineboth.New()
+	lineBotHandler := linebothandler.New()
 	r.POST("/callback", lineBotHandler.LineBotCallBack)
 }
