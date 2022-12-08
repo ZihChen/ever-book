@@ -6,8 +6,10 @@ import (
 )
 
 func init() {
+	// initial database connection
 	db := database.New()
 	db.GetConnection()
+	db.AutoMigrate()
 }
 
 func main() {

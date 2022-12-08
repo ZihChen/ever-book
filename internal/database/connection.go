@@ -2,6 +2,7 @@ package database
 
 import (
 	"ever-book/app/global/errorcode"
+	"ever-book/app/model"
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -13,6 +14,7 @@ var connectPool *gorm.DB
 
 type Interface interface {
 	GetConnection() *gorm.DB
+	AutoMigrate()
 }
 
 type instance struct{}
@@ -49,4 +51,13 @@ func (db *instance) GetConnection() *gorm.DB {
 	fmt.Println("db connect success!")
 
 	return connectPool.Debug()
+}
+
+func (db *instance) AutoMigrate() {
+	database := db.GetConnection()
+
+	err := database.Set("gorm:table_options", "comment '使用者'").AutoMigrate(&model.User{})
+	if err != nil {
+		log.Fatalf(errorcode.AutoMigrateError, err.Error())
+	}
 }
