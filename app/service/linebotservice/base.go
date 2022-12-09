@@ -10,6 +10,8 @@ import (
 
 type Interface interface {
 	GetClient() *linebot.Client
+	ShowBalanceDateOptionTemplate() *linebot.TemplateMessage
+	ShowBalanceTypeOptionTemplate() *linebot.TemplateMessage
 }
 
 type service struct{}
