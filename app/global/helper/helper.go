@@ -4,6 +4,7 @@ import (
 	"ever-book/app/global"
 	"fmt"
 	jsoniter "github.com/json-iterator/go"
+	"log"
 	"strconv"
 )
 
@@ -52,4 +53,20 @@ func PrintLog(param interface{}) {
 	show := string(byteData)
 	fmt.Println("PrintLog:" + show)
 	panic(show)
+}
+
+func StructToMap(myStruct interface{}) (myMap map[string]interface{}) {
+	myMap = make(map[string]interface{})
+	byteData, err := jsoniter.Marshal(myStruct)
+	if err != nil {
+		log.Fatalf("Struct marshal error:%v", err.Error())
+		return
+	}
+
+	if err = jsoniter.Unmarshal(byteData, &myMap); err != nil {
+		log.Fatalf("Struct unmarshal error:%v", err.Error())
+		return
+	}
+
+	return
 }

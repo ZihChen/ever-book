@@ -60,4 +60,9 @@ func (db *instance) AutoMigrate() {
 	if err != nil {
 		log.Fatalf(errorcode.AutoMigrateError, err.Error())
 	}
+
+	err = database.Set("gorm:table_options", "comment '暫存收支紀錄'").AutoMigrate(&model.TemporaryBalance{})
+	if err != nil {
+		log.Fatalf(errorcode.AutoMigrateError, err.Error())
+	}
 }
