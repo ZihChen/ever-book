@@ -2,16 +2,12 @@ package linebotservice
 
 import (
 	"ever-book/app/global"
-	"fmt"
+	"ever-book/app/global/helper"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
-	"time"
 )
 
 func (s *service) ShowBalanceDateOptionTemplate() *linebot.TemplateMessage {
-	tz, _ := time.LoadLocation("Asia/Taipei")
-	now := time.Now().UTC().In(tz)
-	nowDate := fmt.Sprintf("%02d-%02d-%02d", now.Year(), now.Month(), now.Day())
-
+	nowDate := helper.GetNowDate()
 	return linebot.NewTemplateMessage("選擇支出/收入日期", &linebot.CarouselTemplate{
 		Columns: []*linebot.CarouselColumn{
 			{

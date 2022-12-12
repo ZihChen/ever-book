@@ -6,6 +6,7 @@ import (
 	jsoniter "github.com/json-iterator/go"
 	"log"
 	"strconv"
+	"time"
 )
 
 func ValidateTimeString(timeStr string) (parseDate string, isDate bool) {
@@ -69,4 +70,10 @@ func StructToMap(myStruct interface{}) (myMap map[string]interface{}) {
 	}
 
 	return
+}
+
+func GetNowDate() string {
+	tz, _ := time.LoadLocation("Asia/Taipei")
+	now := time.Now().UTC().In(tz)
+	return fmt.Sprintf("%02d-%02d-%02d", now.Year(), now.Month(), now.Day())
 }

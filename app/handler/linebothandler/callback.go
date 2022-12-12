@@ -26,7 +26,7 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 				Date:   recordDate,
 				UserID: user.ID,
 			})
-			// 選鑿日期的下一步:選擇收入/支出
+			// 選擇日期的下一步:選擇收入/支出
 			typeOption := h.LineBotService.ShowBalanceTypeOptionTemplate()
 
 			_, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(recordDate), typeOption).Do()
