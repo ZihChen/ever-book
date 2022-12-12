@@ -1,8 +1,12 @@
 package global
 
 const (
-	Income  string = "收入"
-	Expense string = "支出"
+	Income  string = "income"
+	Expense string = "expense"
+
+	RecordBalanceZhTw string = "我要記帳"
+	IncomeZhTw        string = "收入"
+	ExpenseZhTw       string = "支出"
 )
 
 const (
@@ -12,4 +16,14 @@ const (
 	GasFee       string = "瓦斯費"
 	Launch       string = "外食(午餐)"
 	Dinner       string = "外食(晚餐)"
+)
+
+type TemporaryBalanceColumn string
+
+const (
+	TemporaryBalanceType    TemporaryBalanceColumn = "type"
+	TemporaryBalanceItem    TemporaryBalanceColumn = "item"
+	TemporaryBalanceAmount  TemporaryBalanceColumn = "amount"
+	TemporaryBalancePayment TemporaryBalanceColumn = "payment"
+	TemporaryBalanceRemark  TemporaryBalanceColumn = "remark"
 )

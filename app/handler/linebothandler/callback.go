@@ -1,6 +1,7 @@
 package linebothandler
 
 import (
+	"ever-book/app/global"
 	"ever-book/app/global/structs"
 	"github.com/gin-gonic/gin"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
@@ -38,16 +39,21 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
 				switch message.Text {
-				case "我要記帳":
+				// 記帳起始步驟
+				case global.RecordBalanceZhTw:
 					dateTemplate := h.LineBotService.ShowBalanceDateOptionTemplate()
 					if _, err = bot.ReplyMessage(event.ReplyToken, dateTemplate).Do(); err != nil {
 						log.Fatalf(err.Error())
 					}
-				case "收入":
+				// 選擇收入/支出
+				case global.IncomeZhTw:
 					fallthrough
-				case "支出":
-					// TODO: 先找到最新的一筆TmpRecord，再對type做寫入
-
+				case global.ExpenseZhTw:
+					h.TmpBalanceService.UpdateTemporaryBalance(structs.UpdateTmpBalanceFields{
+						UserID: user.ID,
+						Column: global.TemporaryBalanceType,
+						Value:  zhTwNameKeyConvert(message.Text),
+					})
 				case "查看當日統計":
 				case "查看當月統計":
 				case "刪除上一筆資料":
@@ -58,5 +64,16 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 				}
 			}
 		}
+	}
+}
+
+func zhTwNameKeyConvert(str string) string {
+	switch str {
+	case global.IncomeZhTw:
+		return global.Income
+	case global.ExpenseZhTw:
+		return global.Expense
+	default:
+		return ""
 	}
 }

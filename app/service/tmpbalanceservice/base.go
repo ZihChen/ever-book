@@ -9,6 +9,7 @@ import (
 
 type Interface interface {
 	CreateTemporaryBalance(fields structs.CreateTmpBalanceFields)
+	UpdateTemporaryBalance(fields structs.UpdateTmpBalanceFields)
 }
 
 type service struct {
@@ -30,4 +31,9 @@ func New() Interface {
 func (s *service) CreateTemporaryBalance(fields structs.CreateTmpBalanceFields) {
 	tpMap := helper.StructToMap(fields)
 	s.TmpBalanceRepo.CreateTemporaryBalanceByMap(tpMap)
+}
+
+func (s *service) UpdateTemporaryBalance(fields structs.UpdateTmpBalanceFields) {
+	tmpBalance := s.TmpBalanceRepo.GetLatestTemporaryBalanceByUserID(fields.UserID)
+	s.TmpBalanceRepo.UpdateTemporaryBalanceByID(tmpBalance.ID, fields.Column, fields.Value)
 }
