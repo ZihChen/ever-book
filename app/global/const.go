@@ -7,6 +7,7 @@ const (
 	RecordBalanceZhTw string = "我要記帳"
 	IncomeZhTw        string = "收入"
 	ExpenseZhTw       string = "支出"
+	TodayZhTw         string = "今日"
 )
 
 const (

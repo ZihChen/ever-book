@@ -2,15 +2,18 @@ package linebothandler
 
 import (
 	"ever-book/app/global"
+	"ever-book/app/global/helper"
 	"ever-book/app/global/structs"
 	"github.com/gin-gonic/gin"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 	"log"
 )
 
+var bot *linebot.Client
+
 func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 
-	bot := h.LineBotService.GetClient()
+	bot = h.LineBotService.GetClient()
 	events, err := bot.ParseRequest(ctx.Request)
 	if err != nil {
 		log.Fatalf(err.Error())
@@ -19,20 +22,7 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 	for _, event := range events {
 		user := h.UserService.GetOrCreateUser(event.Source.UserID)
 		if event.Type == linebot.EventTypePostback {
-			recordDate := event.Postback.Params.Date
-
-			// 選日期時開始暫存收支紀錄
-			h.TmpBalanceService.CreateTemporaryBalance(structs.CreateTmpBalanceFields{
-				Date:   recordDate,
-				UserID: user.ID,
-			})
-			// 選擇日期的下一步:選擇收入/支出
-			typeOption := h.LineBotService.ShowBalanceTypeOptionTemplate()
-
-			_, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(recordDate), typeOption).Do()
-			if err != nil {
-				log.Fatalf(err.Error())
-			}
+			h.chooseDateAndShowBalanceType(user.ID, event.Postback.Params.Date, event.ReplyToken)
 		}
 
 		if event.Type == linebot.EventTypeMessage {
@@ -45,6 +35,9 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 					if _, err = bot.ReplyMessage(event.ReplyToken, dateTemplate).Do(); err != nil {
 						log.Fatalf(err.Error())
 					}
+				// 選擇的日期為今日
+				case global.TodayZhTw:
+					h.chooseDateAndShowBalanceType(user.ID, helper.GetNowDate(), event.ReplyToken)
 				// 選擇收入/支出
 				case global.IncomeZhTw:
 					fallthrough
@@ -64,6 +57,21 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 				}
 			}
 		}
+	}
+}
+
+func (h *Handler) chooseDateAndShowBalanceType(userID int, recordDate, replyToken string) {
+	// 選日期時開始暫存收支紀錄
+	h.TmpBalanceService.CreateTemporaryBalance(structs.CreateTmpBalanceFields{
+		Date:   recordDate,
+		UserID: userID,
+	})
+	// 選擇日期的下一步:選擇收入/支出
+	typeOption := h.LineBotService.ShowBalanceTypeOptionTemplate()
+
+	_, err := bot.ReplyMessage(replyToken, linebot.NewTextMessage(recordDate), typeOption).Do()
+	if err != nil {
+		log.Fatalf(err.Error())
 	}
 }
 
