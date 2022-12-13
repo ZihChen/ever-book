@@ -62,3 +62,23 @@ func (s *service) ShowBalanceItemOptionTemplate() (template *linebot.TemplateMes
 		Columns: carouselColumn,
 	})
 }
+
+func (s *service) ShowBalancePaymentOptionTemplate() *linebot.TemplateMessage {
+	return linebot.NewTemplateMessage("選擇支出/收入日期", &linebot.CarouselTemplate{
+		Columns: []*linebot.CarouselColumn{
+			{
+				Text: "選擇付款方式",
+				Actions: []linebot.TemplateAction{
+					&linebot.MessageAction{
+						Label: "現金",
+						Text:  "現金",
+					},
+					&linebot.MessageAction{
+						Label: "信用卡",
+						Text:  "信用卡",
+					},
+				},
+			},
+		},
+	})
+}

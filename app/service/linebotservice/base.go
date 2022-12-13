@@ -13,6 +13,7 @@ type Interface interface {
 	ShowBalanceDateOptionTemplate() *linebot.TemplateMessage
 	ShowBalanceTypeOptionTemplate() *linebot.TemplateMessage
 	ShowBalanceItemOptionTemplate() *linebot.TemplateMessage
+	ShowBalancePaymentOptionTemplate() *linebot.TemplateMessage
 }
 
 type service struct{}

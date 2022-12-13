@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 	"log"
+	"strconv"
 )
 
 var bot *linebot.Client
@@ -28,6 +29,18 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 		if event.Type == linebot.EventTypeMessage {
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
+				// 紀錄金額
+				balanceAmount, err := strconv.Atoi(message.Text)
+				if err == nil {
+					h.TmpBalanceService.UpdateTemporaryBalance(structs.UpdateTmpBalanceFields{
+						UserID: user.ID,
+						Column: global.TemporaryBalanceAmount,
+						Value:  balanceAmount,
+					})
+					paymentTemplate := h.LineBotService.ShowBalancePaymentOptionTemplate()
+					h.replyMessageToUser(event.ReplyToken, paymentTemplate)
+				}
+
 				switch message.Text {
 				// 記帳起始步驟
 				case global.RecordBalanceZhTw:
@@ -54,6 +67,8 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 						Column: global.TemporaryBalanceItem,
 						Value:  helper.ZhTwConvertToKeyName(message.Text),
 					})
+					amountTemplate := linebot.NewTextMessage("請輸入金額：")
+					h.replyMessageToUser(event.ReplyToken, amountTemplate)
 				case "查看當日統計":
 				case "查看當月統計":
 				case "刪除上一筆資料":
