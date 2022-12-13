@@ -58,6 +58,10 @@ func ZhTwConvertToKeyName(str string) string {
 		return global.PayBill
 	case global.PottedPlantZhTw:
 		return global.PottedPlant
+	case global.CreditCardZhTw:
+		return global.CreditCard
+	case global.CashZhTw:
+		return global.Cash
 	}
 	return ""
 }

@@ -70,15 +70,26 @@ func (s *service) ShowBalancePaymentOptionTemplate() *linebot.TemplateMessage {
 				Text: "選擇付款方式",
 				Actions: []linebot.TemplateAction{
 					&linebot.MessageAction{
-						Label: "現金",
-						Text:  "現金",
+						Label: global.CashZhTw,
+						Text:  global.CashZhTw,
 					},
 					&linebot.MessageAction{
-						Label: "信用卡",
-						Text:  "信用卡",
+						Label: global.CreditCardZhTw,
+						Text:  global.CreditCardZhTw,
 					},
 				},
 			},
 		},
 	})
+}
+
+func (s *service) ShowBalanceRemarkOptionTemplate() *linebot.TemplateMessage {
+	return linebot.NewTemplateMessage(
+		"需不需要填寫備註",
+		linebot.NewConfirmTemplate(
+			"需不需要填寫備註",
+			linebot.NewMessageAction(global.NeedZhTw, global.NeedZhTw),
+			linebot.NewMessageAction(global.SkipZhTw, global.SkipZhTw),
+		),
+	)
 }

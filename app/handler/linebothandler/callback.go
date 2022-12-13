@@ -69,6 +69,15 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 					})
 					amountTemplate := linebot.NewTextMessage("請輸入金額：")
 					h.replyMessageToUser(event.ReplyToken, amountTemplate)
+				// 選擇付款方式
+				case global.CashZhTw, global.CreditCardZhTw:
+					h.TmpBalanceService.UpdateTemporaryBalance(structs.UpdateTmpBalanceFields{
+						UserID: user.ID,
+						Column: global.TemporaryBalancePayment,
+						Value:  helper.ZhTwConvertToKeyName(message.Text),
+					})
+					remarkTemplate := h.LineBotService.ShowBalanceRemarkOptionTemplate()
+					h.replyMessageToUser(event.ReplyToken, remarkTemplate)
 				case "查看當日統計":
 				case "查看當月統計":
 				case "刪除上一筆資料":

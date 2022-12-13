@@ -3,6 +3,8 @@ package global
 const (
 	Income             string = "income"
 	Expense            string = "expense"
+	Cash               string = "cash"
+	CreditCard         string = "credit_card"
 	ConsumeGoods       string = "consume_goods"
 	Fruit              string = "fruit"
 	WaterBill          string = "water_bill"
@@ -31,10 +33,14 @@ const (
 )
 
 const (
+	NeedZhTw               string = "需要"
+	SkipZhTw               string = "省略"
 	RecordBalanceZhTw      string = "我要記帳"
 	IncomeZhTw             string = "收入"
 	ExpenseZhTw            string = "支出"
 	TodayZhTw              string = "今日"
+	CashZhTw               string = "現金"
+	CreditCardZhTw         string = "信用卡"
 	ConsumeGoodsZhTw       string = "日用品"
 	FruitZhTw              string = "水果"
 	WaterBillZhTw          string = "水費"
