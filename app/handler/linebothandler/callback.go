@@ -32,9 +32,7 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 				// 記帳起始步驟
 				case global.RecordBalanceZhTw:
 					dateTemplate := h.LineBotService.ShowBalanceDateOptionTemplate()
-					if _, err = bot.ReplyMessage(event.ReplyToken, dateTemplate).Do(); err != nil {
-						log.Fatalf(err.Error())
-					}
+					h.replyMessageToUser(event.ReplyToken, dateTemplate)
 				// 選擇的日期為今日
 				case global.TodayZhTw:
 					h.chooseDateAndShowBalanceType(user.ID, helper.GetNowDate(), event.ReplyToken)
@@ -46,9 +44,7 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 						Value:  helper.ZhTwConvertToKeyName(message.Text),
 					})
 					itemTemplate := h.LineBotService.ShowBalanceItemOptionTemplate()
-					if _, err = bot.ReplyMessage(event.ReplyToken, itemTemplate).Do(); err != nil {
-						log.Fatalf(err.Error())
-					}
+					h.replyMessageToUser(event.ReplyToken, itemTemplate)
 				// 選擇消費種類
 				case global.ConsumeGoodsZhTw, global.FruitZhTw, global.WaterBillZhTw, global.OilFeeZhTw, global.BreakfastZhTw, global.LunchZhTw, global.DinnerZhTw, global.RepairRewardZhTw, global.GasFeeZhTw,
 					global.InsuranceZhTw, global.LivingExpensesZhTw, global.OrganicFoodZhTw, global.DressFeeZhTw, global.HealthyFoodZhTw, global.AutomaticDeductionZhTw, global.ElectricBillZhTw, global.FishZhTW,
@@ -71,6 +67,13 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 	}
 }
 
+func (h *Handler) replyMessageToUser(replyToken string, messages ...linebot.SendingMessage) {
+	_, err := bot.ReplyMessage(replyToken, messages...).Do()
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
+}
+
 func (h *Handler) chooseDateAndShowBalanceType(userID int, recordDate, replyToken string) {
 	// 選日期時開始暫存收支紀錄
 	h.TmpBalanceService.CreateTemporaryBalance(structs.CreateTmpBalanceFields{
@@ -80,8 +83,5 @@ func (h *Handler) chooseDateAndShowBalanceType(userID int, recordDate, replyToke
 	// 選擇日期的下一步:選擇收入/支出
 	typeOption := h.LineBotService.ShowBalanceTypeOptionTemplate()
 
-	_, err := bot.ReplyMessage(replyToken, linebot.NewTextMessage(recordDate), typeOption).Do()
-	if err != nil {
-		log.Fatalf(err.Error())
-	}
+	h.replyMessageToUser(replyToken, linebot.NewTextMessage(recordDate), typeOption)
 }
