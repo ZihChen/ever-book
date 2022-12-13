@@ -1,9 +1,36 @@
 package global
 
 const (
-	Income  string = "income"
-	Expense string = "expense"
+	Income             string = "income"
+	Expense            string = "expense"
+	ConsumeGoods       string = "consume_goods"
+	Fruit              string = "fruit"
+	WaterBill          string = "water_bill"
+	OilFee             string = "oil_fee"
+	Breakfast          string = "breakfast"
+	Lunch              string = "lunch"
+	Dinner             string = "dinner"
+	RepairReward       string = "repair_reward"
+	GasFee             string = "gas_fee"
+	Insurance          string = "insurance"
+	LivingExpenses     string = "living_expenses"
+	OrganicFood        string = "organic_food"
+	DressFee           string = "dress_fee"
+	HealthyFood        string = "healthy_food"
+	AutomaticDeduction string = "automatic_deduction"
+	ElectricBill       string = "electric_bill"
+	Fish               string = "fish"
+	Medical            string = "medical"
+	Ticket             string = "ticket"
+	Gardening          string = "gardening"
+	GroceryShopping    string = "grocery_shopping"
+	EasyCard           string = "easy_card"
+	ManagementCost     string = "management_cost"
+	PayBill            string = "pay_bill"
+	PottedPlant        string = "potted_plant"
+)
 
+const (
 	RecordBalanceZhTw      string = "我要記帳"
 	IncomeZhTw             string = "收入"
 	ExpenseZhTw            string = "支出"
@@ -12,10 +39,12 @@ const (
 	FruitZhTw              string = "水果"
 	WaterBillZhTw          string = "水費"
 	OilFeeZhTw             string = "加油"
-	LunchZhTw              string = "外食(午餐)"
-	DinnerZhTw             string = "外食(晚餐)"
+	BreakfastZhTw          string = "早餐"
+	LunchZhTw              string = "午餐"
+	DinnerZhTw             string = "晚餐"
 	RepairRewardZhTw       string = "外修費"
 	GasFeeZhTw             string = "瓦斯費"
+	InsuranceZhTw          string = "保險費"
 	LivingExpensesZhTw     string = "生活開銷"
 	OrganicFoodZhTw        string = "有機食品"
 	DressFeeZhTw           string = "衣服"
@@ -29,17 +58,8 @@ const (
 	GroceryShoppingZhTw    string = "買菜"
 	EasyCardZhTw           string = "悠遊卡除值"
 	ManagementCostZhTw     string = "管理費"
-	PayBill                string = "繳費"
+	PayBillZhTw            string = "繳費"
 	PottedPlantZhTw        string = "盆栽"
-)
-
-const (
-	DailyConsume string = "日用品"
-	Fruit        string = "水果"
-	WaterFee     string = "水費"
-	GasFee       string = "瓦斯費"
-	Launch       string = "外食(午餐)"
-	Dinner       string = "外食(晚餐)"
 )
 
 type TemporaryBalanceColumn string

@@ -40,3 +40,25 @@ func (s *service) ShowBalanceTypeOptionTemplate() *linebot.TemplateMessage {
 		),
 	)
 }
+
+func (s *service) ShowBalanceItemOptionTemplate() (template *linebot.TemplateMessage) {
+	var carouselColumn []*linebot.CarouselColumn
+	for name, group := range global.BalanceItems {
+		var actions []linebot.TemplateAction
+		for _, item := range group {
+			actions = append(actions, &linebot.MessageAction{
+				Label: item,
+				Text:  item,
+			})
+		}
+		itemGroup := &linebot.CarouselColumn{
+			Text:    name,
+			Actions: actions,
+		}
+		carouselColumn = append(carouselColumn, itemGroup)
+	}
+
+	return linebot.NewTemplateMessage("選擇消費項目", &linebot.CarouselTemplate{
+		Columns: carouselColumn,
+	})
+}

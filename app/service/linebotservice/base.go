@@ -12,6 +12,7 @@ type Interface interface {
 	GetClient() *linebot.Client
 	ShowBalanceDateOptionTemplate() *linebot.TemplateMessage
 	ShowBalanceTypeOptionTemplate() *linebot.TemplateMessage
+	ShowBalanceItemOptionTemplate() *linebot.TemplateMessage
 }
 
 type service struct{}
