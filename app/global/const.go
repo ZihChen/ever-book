@@ -30,6 +30,7 @@ const (
 	ManagementCost     string = "management_cost"
 	PayBill            string = "pay_bill"
 	PottedPlant        string = "potted_plant"
+	Data               string = "data"
 )
 
 const (

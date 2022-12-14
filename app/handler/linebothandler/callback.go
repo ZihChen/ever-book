@@ -23,7 +23,20 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 	for _, event := range events {
 		user := h.UserService.GetOrCreateUser(event.Source.UserID)
 		if event.Type == linebot.EventTypePostback {
-			h.chooseDateAndShowBalanceType(user.ID, event.Postback.Params.Date, event.ReplyToken)
+			switch event.Postback.Data {
+			// 選擇記帳日期
+			case global.Data:
+				h.chooseDateAndShowBalanceType(user.ID, event.Postback.Params.Date, event.ReplyToken)
+			// 選擇收入/支出
+			case global.Expense, global.Income:
+				h.TmpBalanceService.UpdateTemporaryBalance(structs.UpdateTmpBalanceFields{
+					UserID: user.ID,
+					Column: global.TemporaryBalanceType,
+					Value:  event.Postback.Data,
+				})
+				itemTemplate := h.LineBotService.ShowBalanceItemOptionTemplate()
+				h.replyMessageToUser(event.ReplyToken, itemTemplate)
+			}
 		}
 
 		if event.Type == linebot.EventTypeMessage {
@@ -40,7 +53,6 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 					paymentTemplate := h.LineBotService.ShowBalancePaymentOptionTemplate()
 					h.replyMessageToUser(event.ReplyToken, paymentTemplate)
 				}
-
 				switch message.Text {
 				// 記帳起始步驟
 				case global.RecordBalanceZhTw:
@@ -49,15 +61,6 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 				// 選擇的日期為今日
 				case global.TodayZhTw:
 					h.chooseDateAndShowBalanceType(user.ID, helper.GetNowDate(), event.ReplyToken)
-				// 選擇收入/支出
-				case global.IncomeZhTw, global.ExpenseZhTw:
-					h.TmpBalanceService.UpdateTemporaryBalance(structs.UpdateTmpBalanceFields{
-						UserID: user.ID,
-						Column: global.TemporaryBalanceType,
-						Value:  helper.ZhTwConvertToKeyName(message.Text),
-					})
-					itemTemplate := h.LineBotService.ShowBalanceItemOptionTemplate()
-					h.replyMessageToUser(event.ReplyToken, itemTemplate)
 				// 選擇消費種類
 				case global.ConsumeGoodsZhTw, global.FruitZhTw, global.WaterBillZhTw, global.OilFeeZhTw, global.BreakfastZhTw, global.LunchZhTw, global.DinnerZhTw, global.RepairRewardZhTw, global.GasFeeZhTw,
 					global.InsuranceZhTw, global.LivingExpensesZhTw, global.OrganicFoodZhTw, global.DressFeeZhTw, global.HealthyFoodZhTw, global.AutomaticDeductionZhTw, global.ElectricBillZhTw, global.FishZhTW,

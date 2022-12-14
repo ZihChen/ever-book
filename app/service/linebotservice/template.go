@@ -35,8 +35,16 @@ func (s *service) ShowBalanceTypeOptionTemplate() *linebot.TemplateMessage {
 		"請選擇收入或是支出",
 		linebot.NewConfirmTemplate(
 			"請選擇收入或是支出",
-			linebot.NewMessageAction(global.IncomeZhTw, global.IncomeZhTw),
-			linebot.NewMessageAction(global.ExpenseZhTw, global.ExpenseZhTw),
+			&linebot.PostbackAction{
+				Label: global.IncomeZhTw,
+				Text:  global.IncomeZhTw,
+				Data:  global.Income,
+			},
+			&linebot.PostbackAction{
+				Label: global.ExpenseZhTw,
+				Text:  global.ExpenseZhTw,
+				Data:  global.Expense,
+			},
 		),
 	)
 }
