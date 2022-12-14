@@ -13,14 +13,15 @@ func (s *service) ShowBalanceDateOptionTemplate() *linebot.TemplateMessage {
 			{
 				Text: "選擇支出/收入日期",
 				Actions: []linebot.TemplateAction{
-					&linebot.MessageAction{
-						Label: "今日",
-						Text:  "今日",
+					&linebot.PostbackAction{
+						Label: global.TodayZhTw,
+						Text:  global.TodayZhTw,
+						Data:  global.Today,
 					},
 					&linebot.DatetimePickerAction{
-						Label:   "日期",
-						Mode:    "date",
-						Data:    "data",
+						Label:   global.DateZhTw,
+						Mode:    global.Date,
+						Data:    global.Date,
 						Initial: nowDate,
 						Max:     nowDate,
 					},

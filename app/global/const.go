@@ -30,7 +30,8 @@ const (
 	ManagementCost     string = "management_cost"
 	PayBill            string = "pay_bill"
 	PottedPlant        string = "potted_plant"
-	Data               string = "data"
+	Date               string = "date"
+	Today              string = "today"
 )
 
 const (
@@ -39,6 +40,7 @@ const (
 	RecordBalanceZhTw      string = "我要記帳"
 	IncomeZhTw             string = "收入"
 	ExpenseZhTw            string = "支出"
+	DateZhTw               string = "日期"
 	TodayZhTw              string = "今日"
 	CashZhTw               string = "現金"
 	CreditCardZhTw         string = "信用卡"

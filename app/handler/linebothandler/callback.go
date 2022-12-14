@@ -25,8 +25,11 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 		if event.Type == linebot.EventTypePostback {
 			switch event.Postback.Data {
 			// 選擇記帳日期
-			case global.Data:
+			case global.Date:
 				h.chooseDateAndShowBalanceType(user.ID, event.Postback.Params.Date, event.ReplyToken)
+			// 選擇的日期為今日
+			case global.Today:
+				h.chooseDateAndShowBalanceType(user.ID, helper.GetNowDate(), event.ReplyToken)
 			// 選擇收入/支出
 			case global.Expense, global.Income:
 				h.TmpBalanceService.UpdateTemporaryBalance(structs.UpdateTmpBalanceFields{
@@ -58,9 +61,6 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 				case global.RecordBalanceZhTw:
 					dateTemplate := h.LineBotService.ShowBalanceDateOptionTemplate()
 					h.replyMessageToUser(event.ReplyToken, dateTemplate)
-				// 選擇的日期為今日
-				case global.TodayZhTw:
-					h.chooseDateAndShowBalanceType(user.ID, helper.GetNowDate(), event.ReplyToken)
 				// 選擇消費種類
 				case global.ConsumeGoodsZhTw, global.FruitZhTw, global.WaterBillZhTw, global.OilFeeZhTw, global.BreakfastZhTw, global.LunchZhTw, global.DinnerZhTw, global.RepairRewardZhTw, global.GasFeeZhTw,
 					global.InsuranceZhTw, global.LivingExpensesZhTw, global.OrganicFoodZhTw, global.DressFeeZhTw, global.HealthyFoodZhTw, global.AutomaticDeductionZhTw, global.ElectricBillZhTw, global.FishZhTW,
