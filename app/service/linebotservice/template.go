@@ -79,13 +79,15 @@ func (s *service) ShowBalancePaymentOptionTemplate() *linebot.TemplateMessage {
 			{
 				Text: "選擇付款方式",
 				Actions: []linebot.TemplateAction{
-					&linebot.MessageAction{
+					&linebot.PostbackAction{
 						Label: global.CashZhTw,
 						Text:  global.CashZhTw,
+						Data:  global.Cash,
 					},
-					&linebot.MessageAction{
+					&linebot.PostbackAction{
 						Label: global.CreditCardZhTw,
 						Text:  global.CreditCardZhTw,
+						Data:  global.CreditCard,
 					},
 				},
 			},

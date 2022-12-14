@@ -23,7 +23,8 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 	for _, event := range events {
 		user := h.UserService.GetOrCreateUser(event.Source.UserID)
 		if event.Type == linebot.EventTypePostback {
-			switch event.Postback.Data {
+			data := event.Postback.Data
+			switch data {
 			// 選擇記帳日期
 			case global.Date:
 				h.chooseDateAndShowBalanceType(user.ID, event.Postback.Params.Date, event.ReplyToken)
@@ -35,21 +36,30 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 				h.TmpBalanceService.UpdateTemporaryBalance(structs.UpdateTmpBalanceFields{
 					UserID: user.ID,
 					Column: global.TemporaryBalanceType,
-					Value:  event.Postback.Data,
+					Value:  data,
 				})
 				itemTemplate := h.LineBotService.ShowBalanceItemOptionTemplate()
 				h.replyMessageToUser(event.ReplyToken, itemTemplate)
-				// 選擇消費種類
+			// 選擇消費種類
 			case global.ConsumeGoods, global.Fruit, global.WaterBill, global.OilFee, global.Breakfast, global.Lunch, global.Dinner, global.RepairReward, global.GasFee,
 				global.Insurance, global.LivingExpenses, global.OrganicFood, global.DressFee, global.HealthyFood, global.AutomaticDeduction, global.ElectricBill, global.Fish,
 				global.Medical, global.Ticket, global.Gardening, global.GroceryShopping, global.EasyCard, global.ManagementCost, global.PayBill, global.PottedPlant:
 				h.TmpBalanceService.UpdateTemporaryBalance(structs.UpdateTmpBalanceFields{
 					UserID: user.ID,
 					Column: global.TemporaryBalanceItem,
-					Value:  event.Postback.Data,
+					Value:  data,
 				})
 				amountTemplate := linebot.NewTextMessage("請輸入金額：")
 				h.replyMessageToUser(event.ReplyToken, amountTemplate)
+			// 選擇付款方式
+			case global.Cash, global.CreditCard:
+				h.TmpBalanceService.UpdateTemporaryBalance(structs.UpdateTmpBalanceFields{
+					UserID: user.ID,
+					Column: global.TemporaryBalancePayment,
+					Value:  data,
+				})
+				remarkTemplate := h.LineBotService.ShowBalanceRemarkOptionTemplate()
+				h.replyMessageToUser(event.ReplyToken, remarkTemplate)
 			}
 		}
 
@@ -72,15 +82,6 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 				case global.RecordBalanceZhTw:
 					dateTemplate := h.LineBotService.ShowBalanceDateOptionTemplate()
 					h.replyMessageToUser(event.ReplyToken, dateTemplate)
-				// 選擇付款方式
-				case global.CashZhTw, global.CreditCardZhTw:
-					h.TmpBalanceService.UpdateTemporaryBalance(structs.UpdateTmpBalanceFields{
-						UserID: user.ID,
-						Column: global.TemporaryBalancePayment,
-						Value:  helper.ZhTwConvertToKeyName(message.Text),
-					})
-					remarkTemplate := h.LineBotService.ShowBalanceRemarkOptionTemplate()
-					h.replyMessageToUser(event.ReplyToken, remarkTemplate)
 				case "查看當日統計":
 				case "查看當月統計":
 				case "刪除上一筆資料":
