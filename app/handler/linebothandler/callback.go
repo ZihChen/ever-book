@@ -13,7 +13,6 @@ import (
 var bot *linebot.Client
 
 func (h *Handler) LineBotCallBack(ctx *gin.Context) {
-
 	bot = h.LineBotService.GetClient()
 	events, err := bot.ParseRequest(ctx.Request)
 	if err != nil {
@@ -22,7 +21,35 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 
 	for _, event := range events {
 		user := h.UserService.GetOrCreateUser(event.Source.UserID)
-		if event.Type == linebot.EventTypePostback {
+		switch event.Type {
+		case linebot.EventTypeMessage:
+			switch message := event.Message.(type) {
+			case *linebot.TextMessage:
+				// 紀錄金額
+				balanceAmount, err := strconv.Atoi(message.Text)
+				if err == nil {
+					h.TmpBalanceService.UpdateTemporaryBalance(structs.UpdateTmpBalanceFields{
+						UserID: user.ID,
+						Column: global.TemporaryBalanceAmount,
+						Value:  balanceAmount,
+					})
+					paymentTemplate := h.LineBotService.ShowBalancePaymentOptionTemplate()
+					h.replyMessageToUser(event.ReplyToken, paymentTemplate)
+				}
+				switch message.Text {
+				// 記帳起始步驟
+				case global.RecordBalanceZhTw:
+					dateTemplate := h.LineBotService.ShowBalanceDateOptionTemplate()
+					h.replyMessageToUser(event.ReplyToken, dateTemplate)
+				case "查看當日統計":
+				case "查看當月統計":
+				case "刪除上一筆資料":
+				case "對方當月統計":
+				case "範例教學":
+				default:
+				}
+			}
+		case linebot.EventTypePostback:
 			data := event.Postback.Data
 			switch data {
 			// 選擇記帳日期
@@ -60,36 +87,6 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 				})
 				remarkTemplate := h.LineBotService.ShowBalanceRemarkOptionTemplate()
 				h.replyMessageToUser(event.ReplyToken, remarkTemplate)
-			}
-		}
-
-		if event.Type == linebot.EventTypeMessage {
-			switch message := event.Message.(type) {
-			case *linebot.TextMessage:
-				// 紀錄金額
-				balanceAmount, err := strconv.Atoi(message.Text)
-				if err == nil {
-					h.TmpBalanceService.UpdateTemporaryBalance(structs.UpdateTmpBalanceFields{
-						UserID: user.ID,
-						Column: global.TemporaryBalanceAmount,
-						Value:  balanceAmount,
-					})
-					paymentTemplate := h.LineBotService.ShowBalancePaymentOptionTemplate()
-					h.replyMessageToUser(event.ReplyToken, paymentTemplate)
-				}
-				switch message.Text {
-				// 記帳起始步驟
-				case global.RecordBalanceZhTw:
-					dateTemplate := h.LineBotService.ShowBalanceDateOptionTemplate()
-					h.replyMessageToUser(event.ReplyToken, dateTemplate)
-				case "查看當日統計":
-				case "查看當月統計":
-				case "刪除上一筆資料":
-				case "對方當月統計":
-				case "範例教學":
-				default:
-
-				}
 			}
 		}
 	}
