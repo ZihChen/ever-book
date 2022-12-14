@@ -39,6 +39,17 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 				})
 				itemTemplate := h.LineBotService.ShowBalanceItemOptionTemplate()
 				h.replyMessageToUser(event.ReplyToken, itemTemplate)
+				// 選擇消費種類
+			case global.ConsumeGoods, global.Fruit, global.WaterBill, global.OilFee, global.Breakfast, global.Lunch, global.Dinner, global.RepairReward, global.GasFee,
+				global.Insurance, global.LivingExpenses, global.OrganicFood, global.DressFee, global.HealthyFood, global.AutomaticDeduction, global.ElectricBill, global.Fish,
+				global.Medical, global.Ticket, global.Gardening, global.GroceryShopping, global.EasyCard, global.ManagementCost, global.PayBill, global.PottedPlant:
+				h.TmpBalanceService.UpdateTemporaryBalance(structs.UpdateTmpBalanceFields{
+					UserID: user.ID,
+					Column: global.TemporaryBalanceItem,
+					Value:  event.Postback.Data,
+				})
+				amountTemplate := linebot.NewTextMessage("請輸入金額：")
+				h.replyMessageToUser(event.ReplyToken, amountTemplate)
 			}
 		}
 
@@ -61,17 +72,6 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 				case global.RecordBalanceZhTw:
 					dateTemplate := h.LineBotService.ShowBalanceDateOptionTemplate()
 					h.replyMessageToUser(event.ReplyToken, dateTemplate)
-				// 選擇消費種類
-				case global.ConsumeGoodsZhTw, global.FruitZhTw, global.WaterBillZhTw, global.OilFeeZhTw, global.BreakfastZhTw, global.LunchZhTw, global.DinnerZhTw, global.RepairRewardZhTw, global.GasFeeZhTw,
-					global.InsuranceZhTw, global.LivingExpensesZhTw, global.OrganicFoodZhTw, global.DressFeeZhTw, global.HealthyFoodZhTw, global.AutomaticDeductionZhTw, global.ElectricBillZhTw, global.FishZhTW,
-					global.MedicalZhTw, global.TicketZhTw, global.GardeningZhTw, global.GroceryShoppingZhTw, global.EasyCardZhTw, global.ManagementCostZhTw, global.PayBillZhTw, global.PottedPlantZhTw:
-					h.TmpBalanceService.UpdateTemporaryBalance(structs.UpdateTmpBalanceFields{
-						UserID: user.ID,
-						Column: global.TemporaryBalanceItem,
-						Value:  helper.ZhTwConvertToKeyName(message.Text),
-					})
-					amountTemplate := linebot.NewTextMessage("請輸入金額：")
-					h.replyMessageToUser(event.ReplyToken, amountTemplate)
 				// 選擇付款方式
 				case global.CashZhTw, global.CreditCardZhTw:
 					h.TmpBalanceService.UpdateTemporaryBalance(structs.UpdateTmpBalanceFields{

@@ -55,9 +55,10 @@ func (s *service) ShowBalanceItemOptionTemplate() (template *linebot.TemplateMes
 	for name, group := range global.BalanceItems {
 		var actions []linebot.TemplateAction
 		for _, item := range group {
-			actions = append(actions, &linebot.MessageAction{
+			actions = append(actions, &linebot.PostbackAction{
 				Label: item,
 				Text:  item,
+				Data:  helper.ZhTwConvertToKeyName(item),
 			})
 		}
 		itemGroup := &linebot.CarouselColumn{
