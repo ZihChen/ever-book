@@ -1,6 +1,7 @@
 package linebotservice
 
 import (
+	"ever-book/app/global/structs"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 	"log"
 	"net/http"
@@ -15,6 +16,8 @@ type Interface interface {
 	ShowBalanceItemOptionTemplate() *linebot.TemplateMessage
 	ShowBalancePaymentOptionTemplate() *linebot.TemplateMessage
 	ShowBalanceRemarkOptionTemplate() *linebot.TemplateMessage
+	ShowContinueOrDiscardOptionTemplate() *linebot.TemplateMessage
+	ShowTmpBalanceFlexMessage(tmpBalanceObj structs.TmpBalanceObj) *linebot.FlexMessage
 }
 
 type service struct{}

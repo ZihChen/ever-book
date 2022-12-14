@@ -32,9 +32,18 @@ const (
 	PottedPlant        string = "potted_plant"
 	Date               string = "date"
 	Today              string = "today"
+	Continue           string = "continue"
+	Discard            string = "discard"
+	Type               string = "type"
+	Item               string = "item"
+	Amount             string = "amount"
+	Payment            string = "payment"
+	Remark             string = "remark"
 )
 
 const (
+	ContinueZhTw           string = "繼續"
+	DiscardZhTw            string = "捨棄"
 	NeedZhTw               string = "需要"
 	SkipZhTw               string = "省略"
 	RecordBalanceZhTw      string = "我要記帳"
@@ -69,6 +78,11 @@ const (
 	ManagementCostZhTw     string = "管理費"
 	PayBillZhTw            string = "繳費"
 	PottedPlantZhTw        string = "盆栽"
+	TypeZhTw               string = "類型"
+	ItemZhTw               string = "項目"
+	AmountZhTw             string = "金額"
+	PaymentZhTw            string = "付款方式"
+	RemarkZhTw             string = "備註"
 )
 
 type TemporaryBalanceColumn string

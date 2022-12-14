@@ -19,3 +19,12 @@ type UpdateTmpBalanceFields struct {
 	Column global.TemporaryBalanceColumn `json:"column"`
 	Value  interface{}                   `json:"value"`
 }
+
+type TmpBalanceObj struct {
+	Date    string `json:"date"`
+	Type    string `json:"type"`
+	Item    string `json:"item"`
+	Amount  int    `json:"amount"`
+	Payment string `json:"payment"`
+	Remark  string `json:"remark"`
+}

@@ -39,6 +39,13 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 				switch message.Text {
 				// 記帳起始步驟
 				case global.RecordBalanceZhTw:
+					tmpRecord, exist := h.TmpBalanceService.GetTemporaryBalanceByUserID(user.ID)
+					// 如果此用戶已經存在一筆暫存紀錄，則詢問是否繼續步驟
+					if exist {
+						tmpBalanceFlexMsg := h.LineBotService.ShowTmpBalanceFlexMessage(tmpRecord)
+						isContinueTemplate := h.LineBotService.ShowContinueOrDiscardOptionTemplate()
+						h.replyMessageToUser(event.ReplyToken, tmpBalanceFlexMsg, isContinueTemplate)
+					}
 					dateTemplate := h.LineBotService.ShowBalanceDateOptionTemplate()
 					h.replyMessageToUser(event.ReplyToken, dateTemplate)
 				case "查看當日統計":

@@ -62,6 +62,72 @@ func ZhTwConvertToKeyName(str string) string {
 		return global.CreditCard
 	case global.CashZhTw:
 		return global.Cash
+	default:
+		return ""
 	}
-	return ""
+}
+
+func KeyNameConvertToZhTw(str string) string {
+	switch str {
+	case global.Income:
+		return global.IncomeZhTw
+	case global.Expense:
+		return global.ExpenseZhTw
+	case global.ConsumeGoods:
+		return global.ConsumeGoodsZhTw
+	case global.Fruit:
+		return global.FruitZhTw
+	case global.WaterBill:
+		return global.WaterBillZhTw
+	case global.OilFee:
+		return global.OilFeeZhTw
+	case global.Breakfast:
+		return global.BreakfastZhTw
+	case global.Lunch:
+		return global.LunchZhTw
+	case global.Dinner:
+		return global.DinnerZhTw
+	case global.RepairReward:
+		return global.RepairRewardZhTw
+	case global.GasFee:
+		return global.GasFeeZhTw
+	case global.Insurance:
+		return global.InsuranceZhTw
+	case global.LivingExpenses:
+		return global.LivingExpensesZhTw
+	case global.OrganicFood:
+		return global.OrganicFoodZhTw
+	case global.DressFee:
+		return global.DressFeeZhTw
+	case global.HealthyFood:
+		return global.HealthyFoodZhTw
+	case global.AutomaticDeduction:
+		return global.AutomaticDeductionZhTw
+	case global.ElectricBill:
+		return global.ElectricBillZhTw
+	case global.Fish:
+		return global.FishZhTW
+	case global.Medical:
+		return global.MedicalZhTw
+	case global.Ticket:
+		return global.TicketZhTw
+	case global.Gardening:
+		return global.GardeningZhTw
+	case global.GroceryShopping:
+		return global.GroceryShoppingZhTw
+	case global.EasyCard:
+		return global.EasyCardZhTw
+	case global.ManagementCost:
+		return global.ManagementCostZhTw
+	case global.PayBill:
+		return global.PayBillZhTw
+	case global.PottedPlant:
+		return global.PottedPlantZhTw
+	case global.CreditCard:
+		return global.CreditCardZhTw
+	case global.Cash:
+		return global.CashZhTw
+	default:
+		return ""
+	}
 }

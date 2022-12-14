@@ -105,3 +105,22 @@ func (s *service) ShowBalanceRemarkOptionTemplate() *linebot.TemplateMessage {
 		),
 	)
 }
+
+func (s *service) ShowContinueOrDiscardOptionTemplate() *linebot.TemplateMessage {
+	return linebot.NewTemplateMessage(
+		"是否要繼續輸入或是捨棄",
+		linebot.NewConfirmTemplate(
+			"是否要繼續輸入或是捨棄",
+			&linebot.PostbackAction{
+				Label: global.ContinueZhTw,
+				Text:  global.ContinueZhTw,
+				Data:  global.Continue,
+			},
+			&linebot.PostbackAction{
+				Label: global.DiscardZhTw,
+				Text:  global.DiscardZhTw,
+				Data:  global.Discard,
+			},
+		),
+	)
+}
