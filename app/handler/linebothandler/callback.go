@@ -115,6 +115,9 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 			// 是否繼續步驟:捨棄
 			case global.Discard:
 				// TODO: 刪除暫存紀錄回到選擇日期步驟
+				h.TmpBalanceService.DeleteTemporaryBalance(user.ID)
+				template := linebot.NewTextMessage("刪除成功!")
+				h.replyMessageToUser(event.ReplyToken, template)
 			}
 		}
 	}

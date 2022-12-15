@@ -12,6 +12,7 @@ type Interface interface {
 	GetTemporaryBalanceByUserID(userID int) (tmpBalanceObj structs.TmpBalanceObj, exist bool)
 	CreateTemporaryBalance(fields structs.CreateTmpBalanceFields)
 	UpdateTemporaryBalance(fields structs.UpdateTmpBalanceFields)
+	DeleteTemporaryBalance(userID int)
 }
 
 type service struct {
@@ -55,4 +56,8 @@ func (s *service) GetTemporaryBalanceByUserID(userID int) (tmpBalanceObj structs
 	tmpBalanceObj.Payment = tmpBalance.Payment
 	tmpBalanceObj.Remark = tmpBalance.Remark
 	return
+}
+
+func (s *service) DeleteTemporaryBalance(userID int) {
+	s.TmpBalanceRepo.DeleteTemporaryBalanceByUserID(userID)
 }

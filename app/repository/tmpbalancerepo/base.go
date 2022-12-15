@@ -14,6 +14,7 @@ type Interface interface {
 	CreateTemporaryBalanceByMap(fields map[string]interface{})
 	GetLatestTemporaryBalanceByUserID(userID int) (tmpBalance model.TemporaryBalance)
 	UpdateTemporaryBalanceByID(tmpBalanceID int, column global.TemporaryBalanceColumn, value interface{})
+	DeleteTemporaryBalanceByUserID(userID int)
 }
 
 type repository struct {
@@ -78,4 +79,12 @@ func (r *repository) CheckTemporaryBalanceExistByUserID(userID int) (exist bool)
 		return true
 	}
 	return
+}
+
+func (r *repository) DeleteTemporaryBalanceByUserID(userID int) {
+	db := r.DB.GetConnection()
+
+	if err := db.Where("user_id = ?", userID).Delete(&model.TemporaryBalance{}).Error; err != nil {
+		log.Fatalf("Delete Temporary Balance By User ID Error:%v", err.Error())
+	}
 }
