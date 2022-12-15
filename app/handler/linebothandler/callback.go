@@ -45,9 +45,10 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 						tmpBalanceFlexMsg := h.LineBotService.ShowTmpBalanceFlexMessage(tmpRecord)
 						isContinueTemplate := h.LineBotService.ShowContinueOrDiscardOptionTemplate()
 						h.replyMessageToUser(event.ReplyToken, tmpBalanceFlexMsg, isContinueTemplate)
+					} else {
+						dateTemplate := h.LineBotService.ShowBalanceDateOptionTemplate()
+						h.replyMessageToUser(event.ReplyToken, dateTemplate)
 					}
-					dateTemplate := h.LineBotService.ShowBalanceDateOptionTemplate()
-					h.replyMessageToUser(event.ReplyToken, dateTemplate)
 				case "查看當日統計":
 				case "查看當月統計":
 				case "刪除上一筆資料":
@@ -94,6 +95,26 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 				})
 				remarkTemplate := h.LineBotService.ShowBalanceRemarkOptionTemplate()
 				h.replyMessageToUser(event.ReplyToken, remarkTemplate)
+			// 是否繼續步驟:繼續
+			case global.Continue:
+				// 依照順序先檢查種類、項目、金額、付款方式、備註
+				tmpRecord, _ := h.TmpBalanceService.GetTemporaryBalanceByUserID(user.ID)
+				var template linebot.SendingMessage
+				if tmpRecord.Type == "" {
+					template = h.LineBotService.ShowBalanceTypeOptionTemplate()
+				} else if tmpRecord.Item == "" {
+					template = h.LineBotService.ShowBalanceItemOptionTemplate()
+				} else if tmpRecord.Amount == 0 {
+					template = linebot.NewTextMessage("請輸入金額：")
+				} else if tmpRecord.Payment == "" {
+					template = h.LineBotService.ShowBalancePaymentOptionTemplate()
+				} else if tmpRecord.Remark == "" {
+
+				}
+				h.replyMessageToUser(event.ReplyToken, template)
+			// 是否繼續步驟:捨棄
+			case global.Discard:
+				// TODO: 刪除暫存紀錄回到選擇日期步驟
 			}
 		}
 	}
@@ -102,7 +123,7 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 func (h *Handler) replyMessageToUser(replyToken string, messages ...linebot.SendingMessage) {
 	_, err := bot.ReplyMessage(replyToken, messages...).Do()
 	if err != nil {
-		log.Fatalf(err.Error())
+		log.Fatalf("Reply Message Error:%v", err.Error())
 	}
 }
 
