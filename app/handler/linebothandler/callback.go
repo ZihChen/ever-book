@@ -43,7 +43,7 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 					tmpRecord, exist := h.TmpBalanceService.GetTemporaryBalanceByUserID(user.ID)
 					// 如果此用戶已經存在一筆暫存紀錄，則詢問是否繼續步驟
 					if exist {
-						tmpBalanceFlexMsg := h.LineBotService.ShowTmpBalanceFlexMessage(tmpRecord)
+						tmpBalanceFlexMsg := h.LineBotService.ShowTmpBalanceFlexMessage("你有一筆紀錄尚未填寫完!", tmpRecord)
 						isContinueTemplate := h.LineBotService.ShowContinueOrDiscardOptionTemplate()
 						h.replyMessageToUser(event.ReplyToken, tmpBalanceFlexMsg, isContinueTemplate)
 					} else {
@@ -72,26 +72,17 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 						// 如果還沒有暫存收支紀錄亂打資料就不動作
 						return
 					}
-
 					// 檢查是否除了備註外其他必填欄位都已經填寫好
-					if tmpRecord.Type == "" {
-						template := h.LineBotService.ShowBalanceTypeOptionTemplate()
+					template := h.checkColumnsIsFilled(tmpRecord)
+					if template != nil {
 						h.replyMessageToUser(event.ReplyToken, template)
-					} else if tmpRecord.Item == "" {
-						template := h.LineBotService.ShowBalanceItemOptionTemplate()
-						h.replyMessageToUser(event.ReplyToken, template)
-					} else if tmpRecord.Amount == 0 {
-						template := linebot.NewTextMessage("請輸入金額：")
-						h.replyMessageToUser(event.ReplyToken, template)
-					} else if tmpRecord.Payment == "" {
-						template := h.LineBotService.ShowBalancePaymentOptionTemplate()
-						h.replyMessageToUser(event.ReplyToken, template)
+						return
 					}
 					// 新增一筆收支紀錄
 					h.DailyBalanceService.CreateDailyBalanceByTmpBalance(user.ID, tmpRecord)
 					// 將暫存紀錄刪除
 					h.TmpBalanceService.DeleteTemporaryBalance(user.ID)
-					balanceFlexMsg := h.LineBotService.ShowTmpBalanceFlexMessage(tmpRecord)
+					balanceFlexMsg := h.LineBotService.ShowTmpBalanceFlexMessage("新增一筆收支紀錄!", tmpRecord)
 					h.replyMessageToUser(event.ReplyToken, balanceFlexMsg)
 				}
 			}
@@ -140,18 +131,7 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 			case global.Continue:
 				// 依照順序先檢查種類、項目、金額、付款方式、備註
 				tmpRecord, _ := h.TmpBalanceService.GetTemporaryBalanceByUserID(user.ID)
-				var template linebot.SendingMessage
-				if tmpRecord.Type == "" {
-					template = h.LineBotService.ShowBalanceTypeOptionTemplate()
-				} else if tmpRecord.Item == "" {
-					template = h.LineBotService.ShowBalanceItemOptionTemplate()
-				} else if tmpRecord.Amount == 0 {
-					template = linebot.NewTextMessage("請輸入金額：")
-				} else if tmpRecord.Payment == "" {
-					template = h.LineBotService.ShowBalancePaymentOptionTemplate()
-				} else if tmpRecord.Remark == "" {
-
-				}
+				template := h.checkColumnsIsFilled(tmpRecord)
 				h.replyMessageToUser(event.ReplyToken, template)
 			// 是否繼續步驟:捨棄
 			case global.Discard:
@@ -181,4 +161,17 @@ func (h *Handler) chooseDateAndShowBalanceType(userID int, recordDate, replyToke
 	typeOption := h.LineBotService.ShowBalanceTypeOptionTemplate()
 
 	h.replyMessageToUser(replyToken, linebot.NewTextMessage(recordDate), typeOption)
+}
+
+func (h *Handler) checkColumnsIsFilled(tmpRecord structs.TmpBalanceObj) (template linebot.SendingMessage) {
+	if tmpRecord.Type == "" {
+		template = h.LineBotService.ShowBalanceTypeOptionTemplate()
+	} else if tmpRecord.Item == "" {
+		template = h.LineBotService.ShowBalanceItemOptionTemplate()
+	} else if tmpRecord.Amount == 0 {
+		template = linebot.NewTextMessage("請輸入金額：")
+	} else if tmpRecord.Payment == "" {
+		template = h.LineBotService.ShowBalancePaymentOptionTemplate()
+	}
+	return
 }

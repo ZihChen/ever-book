@@ -8,15 +8,15 @@ import (
 	"strconv"
 )
 
-func (s *service) ShowTmpBalanceFlexMessage(tmpBalanceObj structs.TmpBalanceObj) *linebot.FlexMessage {
-	return linebot.NewFlexMessage("你有一筆紀錄尚未填寫完!", &linebot.BubbleContainer{
+func (s *service) ShowTmpBalanceFlexMessage(msgTitle string, tmpBalanceObj structs.TmpBalanceObj) *linebot.FlexMessage {
+	return linebot.NewFlexMessage(msgTitle, &linebot.BubbleContainer{
 		Body: &linebot.BoxComponent{
 			Type:   linebot.FlexComponentTypeBox,
 			Layout: linebot.FlexBoxLayoutTypeVertical,
 			Contents: []linebot.FlexComponent{
 				&linebot.TextComponent{
 					Type:   linebot.FlexComponentTypeText,
-					Text:   "你有一筆紀錄尚未填寫完!",
+					Text:   msgTitle,
 					Weight: linebot.FlexTextWeightTypeBold,
 					Color:  "#1DB446",
 					Size:   linebot.FlexTextSizeTypeSm,
