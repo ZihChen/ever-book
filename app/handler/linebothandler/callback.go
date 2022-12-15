@@ -35,6 +35,7 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 					})
 					paymentTemplate := h.LineBotService.ShowBalancePaymentOptionTemplate()
 					h.replyMessageToUser(event.ReplyToken, paymentTemplate)
+					return
 				}
 				switch message.Text {
 				// 記帳起始步驟
@@ -54,7 +55,44 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 				case "刪除上一筆資料":
 				case "對方當月統計":
 				case "範例教學":
+				case global.TodayZhTw, global.IncomeZhTw, global.ExpenseZhTw, global.CashZhTw, global.CreditCardZhTw, global.ConsumeGoodsZhTw, global.FruitZhTw, global.WaterBillZhTw, global.OilFeeZhTw,
+					global.BreakfastZhTw, global.LunchZhTw, global.DinnerZhTw, global.RepairRewardZhTw, global.GasFeeZhTw, global.InsuranceZhTw, global.LivingExpensesZhTw, global.OrganicFoodZhTw, global.DressFeeZhTw,
+					global.HealthyFoodZhTw, global.AutomaticDeductionZhTw, global.ElectricBillZhTw, global.FishZhTW, global.MedicalZhTw, global.TicketZhTw, global.GardeningZhTw, global.GroceryShoppingZhTw,
+					global.EasyCardZhTw, global.ManagementCostZhTw, global.PayBillZhTw, global.PottedPlantZhTw, global.ContinueZhTw, global.DiscardZhTw, global.NeedRemarkZhTw, global.SkipRemarkZhTw:
+					// 避免觸發寫入備註
+					return
 				default:
+					h.TmpBalanceService.UpdateTemporaryBalance(structs.UpdateTmpBalanceFields{
+						UserID: user.ID,
+						Column: global.TemporaryBalanceRemark,
+						Value:  message.Text,
+					})
+					tmpRecord, exist := h.TmpBalanceService.GetTemporaryBalanceByUserID(user.ID)
+					if !exist {
+						// 如果還沒有暫存收支紀錄亂打資料就不動作
+						return
+					}
+
+					// 檢查是否除了備註外其他必填欄位都已經填寫好
+					if tmpRecord.Type == "" {
+						template := h.LineBotService.ShowBalanceTypeOptionTemplate()
+						h.replyMessageToUser(event.ReplyToken, template)
+					} else if tmpRecord.Item == "" {
+						template := h.LineBotService.ShowBalanceItemOptionTemplate()
+						h.replyMessageToUser(event.ReplyToken, template)
+					} else if tmpRecord.Amount == 0 {
+						template := linebot.NewTextMessage("請輸入金額：")
+						h.replyMessageToUser(event.ReplyToken, template)
+					} else if tmpRecord.Payment == "" {
+						template := h.LineBotService.ShowBalancePaymentOptionTemplate()
+						h.replyMessageToUser(event.ReplyToken, template)
+					}
+					// 新增一筆收支紀錄
+					h.DailyBalanceService.CreateDailyBalanceByTmpBalance(user.ID, tmpRecord)
+					// 將暫存紀錄刪除
+					h.TmpBalanceService.DeleteTemporaryBalance(user.ID)
+					balanceFlexMsg := h.LineBotService.ShowTmpBalanceFlexMessage(tmpRecord)
+					h.replyMessageToUser(event.ReplyToken, balanceFlexMsg)
 				}
 			}
 		case linebot.EventTypePostback:
@@ -95,6 +133,9 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 				})
 				remarkTemplate := h.LineBotService.ShowBalanceRemarkOptionTemplate()
 				h.replyMessageToUser(event.ReplyToken, remarkTemplate)
+			case global.NeedRemark:
+				template := linebot.NewTextMessage("請輸入備註：")
+				h.replyMessageToUser(event.ReplyToken, template)
 			// 是否繼續步驟:繼續
 			case global.Continue:
 				// 依照順序先檢查種類、項目、金額、付款方式、備註
@@ -114,7 +155,7 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 				h.replyMessageToUser(event.ReplyToken, template)
 			// 是否繼續步驟:捨棄
 			case global.Discard:
-				// TODO: 刪除暫存紀錄回到選擇日期步驟
+				// 刪除暫存紀錄回到選擇日期步驟
 				h.TmpBalanceService.DeleteTemporaryBalance(user.ID)
 				template := linebot.NewTextMessage("刪除成功!")
 				h.replyMessageToUser(event.ReplyToken, template)

@@ -100,8 +100,16 @@ func (s *service) ShowBalanceRemarkOptionTemplate() *linebot.TemplateMessage {
 		"需不需要填寫備註",
 		linebot.NewConfirmTemplate(
 			"需不需要填寫備註",
-			linebot.NewMessageAction(global.NeedZhTw, global.NeedZhTw),
-			linebot.NewMessageAction(global.SkipZhTw, global.SkipZhTw),
+			&linebot.PostbackAction{
+				Label: global.NeedRemarkZhTw,
+				Text:  global.NeedRemarkZhTw,
+				Data:  global.NeedRemark,
+			},
+			&linebot.PostbackAction{
+				Label: global.SkipRemarkZhTw,
+				Text:  global.SkipRemarkZhTw,
+				Data:  global.SkipRemark,
+			},
 		),
 	)
 }

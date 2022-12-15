@@ -39,13 +39,15 @@ const (
 	Amount             string = "amount"
 	Payment            string = "payment"
 	Remark             string = "remark"
+	NeedRemark         string = "need_remark"
+	SkipRemark         string = "skip_remark"
 )
 
 const (
 	ContinueZhTw           string = "繼續"
 	DiscardZhTw            string = "捨棄"
-	NeedZhTw               string = "需要"
-	SkipZhTw               string = "省略"
+	NeedRemarkZhTw         string = "需要"
+	SkipRemarkZhTw         string = "省略"
 	RecordBalanceZhTw      string = "我要記帳"
 	IncomeZhTw             string = "收入"
 	ExpenseZhTw            string = "支出"
