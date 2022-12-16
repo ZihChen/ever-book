@@ -43,7 +43,7 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 					tmpRecord, exist := h.TmpBalanceService.GetTemporaryBalanceByUserID(user.ID)
 					// 如果此用戶已經存在一筆暫存紀錄，則詢問是否繼續步驟
 					if exist {
-						tmpBalanceFlexMsg := h.LineBotService.ShowTmpBalanceFlexMessage("你有一筆紀錄尚未填寫完!", tmpRecord)
+						tmpBalanceFlexMsg := h.LineBotService.ShowTmpBalanceFlexMessage(global.UnfinishedBalanceZhTw, tmpRecord)
 						isContinueTemplate := h.LineBotService.ShowContinueOrDiscardOptionTemplate()
 						h.replyMessageToUser(event.ReplyToken, tmpBalanceFlexMsg, isContinueTemplate)
 					} else {
@@ -82,7 +82,7 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 					h.DailyBalanceService.CreateDailyBalanceByTmpBalance(user.ID, tmpRecord)
 					// 將暫存紀錄刪除
 					h.TmpBalanceService.DeleteTemporaryBalance(user.ID)
-					balanceFlexMsg := h.LineBotService.ShowTmpBalanceFlexMessage("新增一筆收支紀錄!", tmpRecord)
+					balanceFlexMsg := h.LineBotService.ShowTmpBalanceFlexMessage(global.SuccessRecordZhTw, tmpRecord)
 					h.replyMessageToUser(event.ReplyToken, balanceFlexMsg)
 				}
 			}
@@ -113,7 +113,7 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 					Column: global.TemporaryBalanceItem,
 					Value:  data,
 				})
-				amountTemplate := linebot.NewTextMessage("請輸入金額：")
+				amountTemplate := linebot.NewTextMessage(global.EnterAmountZhTw)
 				h.replyMessageToUser(event.ReplyToken, amountTemplate)
 			// 選擇付款方式
 			case global.Cash, global.CreditCard:
@@ -126,11 +126,11 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 				h.replyMessageToUser(event.ReplyToken, remarkTemplate)
 			// 填寫備註
 			case global.NeedRemark:
-				template := linebot.NewTextMessage("請輸入備註：")
+				template := linebot.NewTextMessage(global.EnterRemarkZhTw)
 				h.replyMessageToUser(event.ReplyToken, template)
 			case global.SkipRemark:
 				tmpRecord, _ := h.TmpBalanceService.GetTemporaryBalanceByUserID(user.ID)
-				balanceFlexMsg := h.LineBotService.ShowTmpBalanceFlexMessage("新增一筆收支紀錄!", tmpRecord)
+				balanceFlexMsg := h.LineBotService.ShowTmpBalanceFlexMessage(global.SuccessRecordZhTw, tmpRecord)
 				h.replyMessageToUser(event.ReplyToken, balanceFlexMsg)
 			// 是否繼續步驟:繼續
 			case global.Continue:
@@ -142,7 +142,7 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 			case global.Discard:
 				// 刪除暫存紀錄回到選擇日期步驟
 				h.TmpBalanceService.DeleteTemporaryBalance(user.ID)
-				template := linebot.NewTextMessage("刪除成功!")
+				template := linebot.NewTextMessage(global.SuccessDeleteZhTw)
 				h.replyMessageToUser(event.ReplyToken, template)
 			}
 		}
@@ -174,7 +174,7 @@ func (h *Handler) checkColumnsIsFilled(tmpRecord structs.TmpBalanceObj) (templat
 	} else if tmpRecord.Item == "" {
 		template = h.LineBotService.ShowBalanceItemOptionTemplate()
 	} else if tmpRecord.Amount == 0 {
-		template = linebot.NewTextMessage("請輸入金額：")
+		template = linebot.NewTextMessage(global.EnterAmountZhTw)
 	} else if tmpRecord.Payment == "" {
 		template = h.LineBotService.ShowBalancePaymentOptionTemplate()
 	}

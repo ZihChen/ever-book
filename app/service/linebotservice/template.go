@@ -8,10 +8,10 @@ import (
 
 func (s *service) ShowBalanceDateOptionTemplate() *linebot.TemplateMessage {
 	nowDate := helper.GetNowDate()
-	return linebot.NewTemplateMessage("選擇支出/收入日期", &linebot.CarouselTemplate{
+	return linebot.NewTemplateMessage(global.BalanceDateOptionZhTw, &linebot.CarouselTemplate{
 		Columns: []*linebot.CarouselColumn{
 			{
-				Text: "選擇支出/收入日期",
+				Text: global.BalanceDateOptionZhTw,
 				Actions: []linebot.TemplateAction{
 					&linebot.PostbackAction{
 						Label: global.TodayZhTw,
@@ -33,9 +33,9 @@ func (s *service) ShowBalanceDateOptionTemplate() *linebot.TemplateMessage {
 
 func (s *service) ShowBalanceTypeOptionTemplate() *linebot.TemplateMessage {
 	return linebot.NewTemplateMessage(
-		"請選擇收入或是支出",
+		global.BalanceTypeOptionZhTw,
 		linebot.NewConfirmTemplate(
-			"請選擇收入或是支出",
+			global.BalanceTypeOptionZhTw,
 			&linebot.PostbackAction{
 				Label: global.IncomeZhTw,
 				Text:  global.IncomeZhTw,
@@ -68,16 +68,16 @@ func (s *service) ShowBalanceItemOptionTemplate() (template *linebot.TemplateMes
 		carouselColumn = append(carouselColumn, itemGroup)
 	}
 
-	return linebot.NewTemplateMessage("選擇消費項目", &linebot.CarouselTemplate{
+	return linebot.NewTemplateMessage(global.BalanceItemOptionZhTw, &linebot.CarouselTemplate{
 		Columns: carouselColumn,
 	})
 }
 
 func (s *service) ShowBalancePaymentOptionTemplate() *linebot.TemplateMessage {
-	return linebot.NewTemplateMessage("選擇支出/收入日期", &linebot.CarouselTemplate{
+	return linebot.NewTemplateMessage(global.BalancePaymentOptionZhTw, &linebot.CarouselTemplate{
 		Columns: []*linebot.CarouselColumn{
 			{
-				Text: "選擇付款方式",
+				Text: global.BalancePaymentOptionZhTw,
 				Actions: []linebot.TemplateAction{
 					&linebot.PostbackAction{
 						Label: global.CashZhTw,
@@ -97,9 +97,9 @@ func (s *service) ShowBalancePaymentOptionTemplate() *linebot.TemplateMessage {
 
 func (s *service) ShowBalanceRemarkOptionTemplate() *linebot.TemplateMessage {
 	return linebot.NewTemplateMessage(
-		"需不需要填寫備註",
+		global.BalanceRemarkOptionZhTw,
 		linebot.NewConfirmTemplate(
-			"需不需要填寫備註",
+			global.BalanceRemarkOptionZhTw,
 			&linebot.PostbackAction{
 				Label: global.NeedRemarkZhTw,
 				Text:  global.NeedRemarkZhTw,
@@ -116,9 +116,9 @@ func (s *service) ShowBalanceRemarkOptionTemplate() *linebot.TemplateMessage {
 
 func (s *service) ShowContinueOrDiscardOptionTemplate() *linebot.TemplateMessage {
 	return linebot.NewTemplateMessage(
-		"是否要繼續輸入或是捨棄",
+		global.ContinueOrNotOptionZhTw,
 		linebot.NewConfirmTemplate(
-			"是否要繼續輸入或是捨棄",
+			global.ContinueOrNotOptionZhTw,
 			&linebot.PostbackAction{
 				Label: global.ContinueZhTw,
 				Text:  global.ContinueZhTw,
