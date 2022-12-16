@@ -42,7 +42,7 @@ func (s *service) UpdateTemporaryBalance(fields structs.UpdateTmpBalanceFields) 
 }
 
 func (s *service) GetTemporaryBalanceByUserID(userID int) (tmpBalanceObj structs.TmpBalanceObj, exist bool) {
-	if exist = s.TmpBalanceRepo.CheckTemporaryBalanceExistByUserID(userID); exist == false {
+	if exist = s.TmpBalanceRepo.CheckTemporaryBalanceExistByUserID(userID); !exist {
 		return
 	}
 	tmpBalance := s.TmpBalanceRepo.GetTemporaryBalanceByUserID(userID)
