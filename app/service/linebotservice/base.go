@@ -17,7 +17,9 @@ type Interface interface {
 	ShowBalancePaymentOptionTemplate() *linebot.TemplateMessage
 	ShowBalanceRemarkOptionTemplate() *linebot.TemplateMessage
 	ShowContinueOrDiscardOptionTemplate() *linebot.TemplateMessage
+	ShowCancelOrNotOptionTemplate() *linebot.TemplateMessage
 	ShowTmpBalanceFlexMessage(msgTitle string, tmpBalanceObj structs.TmpBalanceObj) *linebot.FlexMessage
+	ShowCancelBalanceFlexMessage(msgTitle string, tmpBalanceObj structs.TmpBalanceObj) *linebot.FlexMessage
 }
 
 type service struct{}

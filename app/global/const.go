@@ -41,6 +41,8 @@ const (
 	Remark             string = "remark"
 	NeedRemark         string = "need_remark"
 	SkipRemark         string = "skip_remark"
+	ConfirmDelete      string = "confirm_delete"
+	CancelDelete       string = "cancel_delete"
 )
 
 const (
@@ -86,7 +88,7 @@ const (
 	PaymentZhTw              string = "付款方式"
 	RemarkZhTw               string = "備註"
 	SuccessRecordZhTw        string = "成功新增一筆收支紀錄!"
-	SuccessDeleteZhTw        string = "成功新增一筆收支紀錄!"
+	SuccessDiscardZhTw       string = "捨棄收支紀錄"
 	EnterRemarkZhTw          string = "請輸入備註："
 	EnterAmountZhTw          string = "請輸入金額："
 	UnfinishedBalanceZhTw    string = "你有一筆紀錄尚未填寫完!"
@@ -96,6 +98,13 @@ const (
 	BalancePaymentOptionZhTw string = "選擇付款方式"
 	BalanceRemarkOptionZhTw  string = "需不需要填寫備註"
 	ContinueOrNotOptionZhTw  string = "是否要繼續輸入或是捨棄"
+	AccountBookSummaryZhTw   string = "查看帳本"
+	OtherAccountBookZhTw     string = "對方帳本"
+	DeletePreviousRecordZhTw string = "刪除上一筆"
+	CancelOrNotZhTw          string = "是否刪除?"
+	ConfirmZhTw              string = "確認"
+	CancelZhTw               string = "取消"
+	SuccessDeleteZhTw        string = "刪除成功"
 )
 
 type TemporaryBalanceColumn string

@@ -132,3 +132,22 @@ func (s *service) ShowContinueOrDiscardOptionTemplate() *linebot.TemplateMessage
 		),
 	)
 }
+
+func (s *service) ShowCancelOrNotOptionTemplate() *linebot.TemplateMessage {
+	return linebot.NewTemplateMessage(
+		global.CancelOrNotZhTw,
+		linebot.NewConfirmTemplate(
+			global.CancelOrNotZhTw,
+			&linebot.PostbackAction{
+				Label: global.ConfirmZhTw,
+				Text:  global.ConfirmZhTw,
+				Data:  global.ConfirmDelete,
+			},
+			&linebot.PostbackAction{
+				Label: global.CancelZhTw,
+				Text:  global.CancelZhTw,
+				Data:  global.CancelDelete,
+			},
+		),
+	)
+}
