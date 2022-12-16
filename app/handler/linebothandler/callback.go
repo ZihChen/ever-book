@@ -124,9 +124,14 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 				})
 				remarkTemplate := h.LineBotService.ShowBalanceRemarkOptionTemplate()
 				h.replyMessageToUser(event.ReplyToken, remarkTemplate)
+			// 填寫備註
 			case global.NeedRemark:
 				template := linebot.NewTextMessage("請輸入備註：")
 				h.replyMessageToUser(event.ReplyToken, template)
+			case global.SkipRemark:
+				tmpRecord, _ := h.TmpBalanceService.GetTemporaryBalanceByUserID(user.ID)
+				balanceFlexMsg := h.LineBotService.ShowTmpBalanceFlexMessage("新增一筆收支紀錄!", tmpRecord)
+				h.replyMessageToUser(event.ReplyToken, balanceFlexMsg)
 			// 是否繼續步驟:繼續
 			case global.Continue:
 				// 依照順序先檢查種類、項目、金額、付款方式、備註
