@@ -177,6 +177,8 @@ func (h *Handler) checkColumnsIsFilled(tmpRecord structs.TmpBalanceObj) (templat
 		template = linebot.NewTextMessage(global.EnterAmountZhTw)
 	} else if tmpRecord.Payment == "" {
 		template = h.LineBotService.ShowBalancePaymentOptionTemplate()
+	} else if tmpRecord.Remark == "" {
+		template = linebot.NewTextMessage(global.EnterRemarkZhTw)
 	}
 	return
 }
