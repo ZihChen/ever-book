@@ -18,7 +18,6 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 	if err != nil {
 		log.Fatalf(err.Error())
 	}
-
 	for _, event := range events {
 		user := h.UserService.GetOrCreateUser(event.Source.UserID)
 		switch event.Type {
@@ -50,7 +49,10 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 						dateTemplate := h.LineBotService.ShowBalanceDateOptionTemplate()
 						h.replyMessageToUser(event.ReplyToken, dateTemplate)
 					}
+				// 查看帳本
 				case global.AccountBookSummaryZhTw:
+					monthOption := h.LineBotService.ShowMonthOptionTemplate()
+					h.replyMessageToUser(event.ReplyToken, monthOption)
 				case global.OtherAccountBookZhTw:
 				case global.DeletePreviousRecordZhTw:
 					balance, exist := h.DailyBalanceService.GetLatestDailyBalance(user.ID)
@@ -65,7 +67,8 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 				case global.TodayZhTw, global.IncomeZhTw, global.ExpenseZhTw, global.CashZhTw, global.CreditCardZhTw, global.ConsumeGoodsZhTw, global.FruitZhTw, global.WaterBillZhTw, global.OilFeeZhTw,
 					global.BreakfastZhTw, global.LunchZhTw, global.DinnerZhTw, global.RepairRewardZhTw, global.GasFeeZhTw, global.InsuranceZhTw, global.LivingExpensesZhTw, global.OrganicFoodZhTw, global.DressFeeZhTw,
 					global.HealthyFoodZhTw, global.AutomaticDeductionZhTw, global.ElectricBillZhTw, global.FishZhTW, global.MedicalZhTw, global.TicketZhTw, global.GardeningZhTw, global.GroceryShoppingZhTw,
-					global.EasyCardZhTw, global.ManagementCostZhTw, global.PayBillZhTw, global.PottedPlantZhTw, global.ContinueZhTw, global.DiscardZhTw, global.NeedRemarkZhTw, global.SkipRemarkZhTw, global.ConfirmZhTw, global.CancelZhTw:
+					global.EasyCardZhTw, global.ManagementCostZhTw, global.PayBillZhTw, global.PottedPlantZhTw, global.ContinueZhTw, global.DiscardZhTw, global.NeedRemarkZhTw, global.SkipRemarkZhTw, global.ConfirmZhTw, global.CancelZhTw,
+					global.JanZhTw, global.FebZhTw, global.MarZhTw, global.AprZhTw, global.MayZhTw, global.JunZhTw, global.JulZhTw, global.AugZhTw, global.SepZhTw, global.OctZhTw, global.NovZhTw, global.DecZhTw:
 					// 避免觸發寫入備註
 					return
 				default:
@@ -160,6 +163,8 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 				h.DailyBalanceService.DeletePreviousDailyBalance(user.ID)
 				template := linebot.NewTextMessage(global.SuccessDeleteZhTw)
 				h.replyMessageToUser(event.ReplyToken, template)
+			case global.JanSummary, global.FebSummary, global.MarSummary, global.AprSummary, global.MaySummary, global.JunSummary, global.JulSummary, global.AugSummary, global.SepSummary, global.OctSummary, global.NovSummary, global.DecSummary:
+				h.DailyBalanceService.GetDailyBalancesByMonth(user.ID, helper.KeyNameConvertToMonth(data))
 			}
 		}
 	}

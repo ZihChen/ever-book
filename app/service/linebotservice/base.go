@@ -20,6 +20,7 @@ type Interface interface {
 	ShowCancelOrNotOptionTemplate() *linebot.TemplateMessage
 	ShowTmpBalanceFlexMessage(msgTitle string, tmpBalanceObj structs.TmpBalanceObj) *linebot.FlexMessage
 	ShowCancelBalanceFlexMessage(msgTitle string, tmpBalanceObj structs.TmpBalanceObj) *linebot.FlexMessage
+	ShowMonthOptionTemplate() *linebot.TemplateMessage
 }
 
 type service struct{}

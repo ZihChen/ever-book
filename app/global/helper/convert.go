@@ -131,3 +131,96 @@ func KeyNameConvertToZhTw(str string) string {
 		return ""
 	}
 }
+
+func MonthConvertToZhTw(month int) string {
+	switch month {
+	case 1:
+		return global.JanZhTw
+	case 2:
+		return global.FebZhTw
+	case 3:
+		return global.MarZhTw
+	case 4:
+		return global.AprZhTw
+	case 5:
+		return global.MayZhTw
+	case 6:
+		return global.JunZhTw
+	case 7:
+		return global.JulZhTw
+	case 8:
+		return global.AugZhTw
+	case 9:
+		return global.SepZhTw
+	case 10:
+		return global.OctZhTw
+	case 11:
+		return global.NovZhTw
+	case 12:
+		return global.DecZhTw
+	default:
+		return ""
+	}
+}
+
+func MonthConvertToKeyName(month int) string {
+	switch month {
+	case 1:
+		return global.JanSummary
+	case 2:
+		return global.FebSummary
+	case 3:
+		return global.MarSummary
+	case 4:
+		return global.AprSummary
+	case 5:
+		return global.MaySummary
+	case 6:
+		return global.JunSummary
+	case 7:
+		return global.JulSummary
+	case 8:
+		return global.AugSummary
+	case 9:
+		return global.SepSummary
+	case 10:
+		return global.OctSummary
+	case 11:
+		return global.NovSummary
+	case 12:
+		return global.DecSummary
+	default:
+		return ""
+	}
+}
+
+func KeyNameConvertToMonth(key string) int {
+	switch key {
+	case global.JanSummary:
+		return 1
+	case global.FebSummary:
+		return 2
+	case global.MarSummary:
+		return 3
+	case global.AprSummary:
+		return 4
+	case global.MaySummary:
+		return 5
+	case global.JunSummary:
+		return 6
+	case global.JulSummary:
+		return 7
+	case global.AugSummary:
+		return 8
+	case global.SepSummary:
+		return 9
+	case global.OctSummary:
+		return 10
+	case global.NovSummary:
+		return 11
+	case global.DecSummary:
+		return 12
+	default:
+		return 0
+	}
+}

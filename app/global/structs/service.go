@@ -28,3 +28,18 @@ type TmpBalanceObj struct {
 	Payment string `json:"payment"`
 	Remark  string `json:"remark"`
 }
+
+type BalanceObj struct {
+	ID      int    `json:"id"`
+	Date    string `json:"date"`
+	Type    string `json:"type"`
+	Item    string `json:"item"`
+	Amount  int    `json:"amount"`
+	Payment string `json:"payment"`
+	Remark  string `json:"remark"`
+}
+
+type DateInterval struct {
+	StartDate string `json:"start_date"`
+	EndDate   string `json:"end_date"`
+}

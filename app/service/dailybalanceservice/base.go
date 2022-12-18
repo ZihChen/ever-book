@@ -12,6 +12,7 @@ type Interface interface {
 	CreateDailyBalanceByTmpBalance(userID int, tmpBalanceObj structs.TmpBalanceObj)
 	GetLatestDailyBalance(userID int) (tmpBalanceObj structs.TmpBalanceObj, exist bool)
 	DeletePreviousDailyBalance(userID int)
+	GetDailyBalancesByMonth(userID int, month int) (balanceObjs []structs.BalanceObj)
 }
 type service struct {
 	DailyBalanceRepo dailybalancerepo.Interface
@@ -55,4 +56,23 @@ func (s *service) GetLatestDailyBalance(userID int) (tmpBalanceObj structs.TmpBa
 func (s *service) DeletePreviousDailyBalance(userID int) {
 	dailyBalance := s.DailyBalanceRepo.GatLatestDailyBalanceByUserID(userID)
 	s.DailyBalanceRepo.DeleteDailyBalanceByID(dailyBalance.ID)
+}
+
+func (s *service) GetDailyBalancesByMonth(userID int, month int) (balanceObjs []structs.BalanceObj) {
+	dailyBalances := s.DailyBalanceRepo.GetDailyBalanceByDateInterval(userID, helper.GetIntervalDate(month))
+	for _, dailyBalance := range dailyBalances {
+		balanceObjs = append(balanceObjs, structs.BalanceObj{
+			ID: dailyBalance.ID,
+			Date: func() string {
+				dateTime := dailyBalance.Date
+				return fmt.Sprintf("%02d-%02d-%02d", dateTime.Year(), dateTime.Month(), dateTime.Day())
+			}(),
+			Type:    dailyBalance.Type,
+			Item:    dailyBalance.Item,
+			Amount:  dailyBalance.Amount,
+			Payment: dailyBalance.Payment,
+			Remark:  dailyBalance.Remark,
+		})
+	}
+	return
 }

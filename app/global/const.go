@@ -97,6 +97,7 @@ const (
 	BalanceItemOptionZhTw    string = "選擇消費項目"
 	BalancePaymentOptionZhTw string = "選擇付款方式"
 	BalanceRemarkOptionZhTw  string = "需不需要填寫備註"
+	BalanceMonthOptionZhTw   string = "選擇月份"
 	ContinueOrNotOptionZhTw  string = "是否要繼續輸入或是捨棄"
 	AccountBookSummaryZhTw   string = "查看帳本"
 	OtherAccountBookZhTw     string = "對方帳本"
@@ -115,4 +116,34 @@ const (
 	TemporaryBalanceAmount  TemporaryBalanceColumn = "amount"
 	TemporaryBalancePayment TemporaryBalanceColumn = "payment"
 	TemporaryBalanceRemark  TemporaryBalanceColumn = "remark"
+)
+
+const (
+	JanZhTw string = "一月"
+	FebZhTw string = "二月"
+	MarZhTw string = "三月"
+	AprZhTw string = "四月"
+	MayZhTw string = "五月"
+	JunZhTw string = "六月"
+	JulZhTw string = "七月"
+	AugZhTw string = "八月"
+	SepZhTw string = "九月"
+	OctZhTw string = "十月"
+	NovZhTw string = "十一月"
+	DecZhTw string = "十二月"
+)
+
+const (
+	JanSummary string = "january_sum"
+	FebSummary string = "february_sum"
+	MarSummary string = "march_sum"
+	AprSummary string = "april_sum"
+	MaySummary string = "may_sum"
+	JunSummary string = "june_sum"
+	JulSummary string = "july_sum"
+	AugSummary string = "august_sum"
+	SepSummary string = "september_sum"
+	OctSummary string = "october_sum"
+	NovSummary string = "november_sum"
+	DecSummary string = "december_sum"
 )

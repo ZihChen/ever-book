@@ -4,6 +4,7 @@ import (
 	"ever-book/app/global"
 	"ever-book/app/global/helper"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
+	"time"
 )
 
 func (s *service) ShowBalanceDateOptionTemplate() *linebot.TemplateMessage {
@@ -150,4 +151,30 @@ func (s *service) ShowCancelOrNotOptionTemplate() *linebot.TemplateMessage {
 			},
 		),
 	)
+}
+
+func (s *service) ShowMonthOptionTemplate() (template *linebot.TemplateMessage) {
+	var carouselColumn []*linebot.CarouselColumn
+	var monthsArr []int
+	nowMonth := time.Now().Month()
+	monthsArr = append(monthsArr, int(nowMonth))
+	for i := 1; i <= 2 ; i ++ {
+		month := time.Now().AddDate(0,-i,0).Month()
+		monthsArr = append(monthsArr, int(month))
+	}
+	var actions []linebot.TemplateAction
+	for _, month := range monthsArr {
+		actions = append(actions, &linebot.PostbackAction{
+			Label: helper.MonthConvertToZhTw(month),
+			Text:  helper.MonthConvertToZhTw(month),
+			Data:  helper.MonthConvertToKeyName(month),
+		})
+	}
+	carouselColumn = append(carouselColumn, &linebot.CarouselColumn{
+		Text:    global.BalanceMonthOptionZhTw,
+		Actions: actions,
+	})
+	return linebot.NewTemplateMessage(global.BalanceMonthOptionZhTw, &linebot.CarouselTemplate{
+		Columns: carouselColumn,
+	})
 }

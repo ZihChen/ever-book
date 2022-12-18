@@ -2,7 +2,9 @@ package helper
 
 import (
 	"ever-book/app/global"
+	"ever-book/app/global/structs"
 	"fmt"
+	jinnow "github.com/jinzhu/now"
 	jsoniter "github.com/json-iterator/go"
 	"log"
 	"strconv"
@@ -76,4 +78,21 @@ func GetNowDate() string {
 	tz, _ := time.LoadLocation("Asia/Taipei")
 	now := time.Now().UTC().In(tz)
 	return fmt.Sprintf("%02d-%02d-%02d", now.Year(), now.Month(), now.Day())
+}
+
+func GetIntervalDate(month int) structs.DateInterval {
+	now := time.Now()
+	nowMonth := now.Month()
+	t := time.Date(now.Year(), time.Month(month+1), 0, 0, 0, 0, 0, time.Now().Location())
+	if month > int(nowMonth) {
+		t.AddDate(-1, 0, 0)
+	}
+
+	beginningOfMonth := jinnow.With(t).BeginningOfMonth()
+	endOfMonth := jinnow.With(t).EndOfMonth()
+
+	return structs.DateInterval{
+		StartDate: fmt.Sprintf("%02d-%02d-%02d %02d:%02d:%02d", beginningOfMonth.Year(), beginningOfMonth.Month(), beginningOfMonth.Day(), 0, 0, 0),
+		EndDate:   fmt.Sprintf("%02d-%02d-%02d %02d:%02d:%02d", endOfMonth.Year(), endOfMonth.Month(), endOfMonth.Day(), 0, 0, 0),
+	}
 }

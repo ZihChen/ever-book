@@ -1,6 +1,7 @@
 package dailybalancerepo
 
 import (
+	"ever-book/app/global/structs"
 	"ever-book/app/model"
 	"ever-book/internal/database"
 	"log"
@@ -12,6 +13,7 @@ type Interface interface {
 	GatLatestDailyBalanceByUserID(userID int) (dailyBalance model.DailyBalance)
 	CheckDailyBalanceExistByUserID(userID int) (exist bool)
 	DeleteDailyBalanceByID(id int)
+	GetDailyBalanceByDateInterval(userID int, interval structs.DateInterval) (dailyBalances []model.DailyBalance)
 }
 
 type repository struct {
@@ -65,4 +67,15 @@ func (r *repository) DeleteDailyBalanceByID(id int) {
 	if err := db.Where("id = ?", id).Delete(&model.DailyBalance{}).Error; err != nil {
 		log.Fatalf("Delete Daily Balance By ID Error:%v", err.Error())
 	}
+}
+
+func (r *repository) GetDailyBalanceByDateInterval(userID int, interval structs.DateInterval) (dailyBalances []model.DailyBalance) {
+	db := r.DB.GetConnection()
+
+	if err := db.Where("user_id = ? AND date >= ? AND date <= ?", userID, interval.StartDate, interval.EndDate).
+		Find(&dailyBalances).Error; err != nil {
+		log.Fatalf("Get Daily Balance By Date Interval Error:%v", err.Error())
+	}
+
+	return
 }
