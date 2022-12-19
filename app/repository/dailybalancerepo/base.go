@@ -1,6 +1,7 @@
 package dailybalancerepo
 
 import (
+	"database/sql"
 	"ever-book/app/global/structs"
 	"ever-book/app/model"
 	"ever-book/internal/database"
@@ -14,6 +15,7 @@ type Interface interface {
 	CheckDailyBalanceExistByUserID(userID int) (exist bool)
 	DeleteDailyBalanceByID(id int)
 	GetDailyBalanceByDateInterval(userID int, interval structs.DateInterval) (dailyBalances []model.DailyBalance)
+	GetTotalAmountByDateInterval(userID int, balanceType string, interval structs.DateInterval) (totalAmount int)
 }
 
 type repository struct {
@@ -72,10 +74,28 @@ func (r *repository) DeleteDailyBalanceByID(id int) {
 func (r *repository) GetDailyBalanceByDateInterval(userID int, interval structs.DateInterval) (dailyBalances []model.DailyBalance) {
 	db := r.DB.GetConnection()
 
-	if err := db.Where("user_id = ? AND date >= ? AND date <= ?", userID, interval.StartDate, interval.EndDate).
+	if err := db.Order("date desc").Where("user_id = ? AND date >= ? AND date <= ?", userID, interval.StartDate, interval.EndDate).
 		Find(&dailyBalances).Error; err != nil {
 		log.Fatalf("Get Daily Balance By Date Interval Error:%v", err.Error())
 	}
 
 	return
+}
+
+func (r *repository) GetTotalAmountByDateInterval(userID int, balanceType string, interval structs.DateInterval) (totalAmount int) {
+	db := r.DB.GetConnection()
+
+	var check sql.NullInt64
+
+	if err := db.Table("daily_balance").
+		Where("user_id = ? AND type = ? AND date >= ? AND date <= ?", userID, balanceType, interval.StartDate, interval.EndDate).
+		Select("sum(amount) as amountTotal").
+		Scan(&check).Error; err != nil {
+		log.Fatalf("Get Total Amount By Date Interval Error:%v", err.Error())
+	}
+	if !check.Valid {
+		return 0
+	}
+
+	return int(check.Int64)
 }

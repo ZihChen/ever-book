@@ -147,3 +147,8 @@ const (
 	NovSummary string = "november_sum"
 	DecSummary string = "december_sum"
 )
+
+const (
+	MomBudget int = 45000
+	DadBudget int = 20000
+)

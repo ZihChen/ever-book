@@ -43,3 +43,16 @@ type DateInterval struct {
 	StartDate string `json:"start_date"`
 	EndDate   string `json:"end_date"`
 }
+
+type SummaryFlexMsg struct {
+	StartDate     string       `json:"start_date"`
+	EndDate       string       `json:"end_date"`
+	TotalExpenses int          `json:"total_expenses"`
+	TotalBalance  int          `json:"total_balance"`
+	BalanceObjs   []BalanceObj `json:"balance_objs"`
+}
+
+type BalanceSummaryObj struct {
+	TotalExpense int `json:"total_expenses"`
+	TotalBalance int `json:"total_balance"`
+}

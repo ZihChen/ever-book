@@ -1,6 +1,7 @@
 package dailybalanceservice
 
 import (
+	"ever-book/app/global"
 	"ever-book/app/global/helper"
 	"ever-book/app/global/structs"
 	"ever-book/app/repository/dailybalancerepo"
@@ -13,6 +14,7 @@ type Interface interface {
 	GetLatestDailyBalance(userID int) (tmpBalanceObj structs.TmpBalanceObj, exist bool)
 	DeletePreviousDailyBalance(userID int)
 	GetDailyBalancesByMonth(userID int, month int) (balanceObjs []structs.BalanceObj)
+	GetTotalBalanceByMonth(userID int, month int) (balanceSum structs.BalanceSummaryObj)
 }
 type service struct {
 	DailyBalanceRepo dailybalancerepo.Interface
@@ -75,4 +77,14 @@ func (s *service) GetDailyBalancesByMonth(userID int, month int) (balanceObjs []
 		})
 	}
 	return
+}
+
+func (s *service) GetTotalBalanceByMonth(userID int, month int) (balanceSum structs.BalanceSummaryObj) {
+	totalExpense := s.DailyBalanceRepo.GetTotalAmountByDateInterval(userID, global.Expense, helper.GetIntervalDate(month))
+	totalIncome := s.DailyBalanceRepo.GetTotalAmountByDateInterval(userID, global.Income, helper.GetIntervalDate(month))
+
+	return structs.BalanceSummaryObj{
+		TotalExpense: totalExpense,
+		TotalBalance: global.MomBudget + totalIncome - totalExpense,
+	}
 }

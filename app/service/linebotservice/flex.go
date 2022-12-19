@@ -337,3 +337,150 @@ func (s *service) ShowCancelBalanceFlexMessage(msgTitle string, tmpBalanceObj st
 		},
 	})
 }
+
+func (s *service) ShowSummaryFlexMessage(msgTitle string, summaryFlexMsg structs.SummaryFlexMsg) *linebot.FlexMessage {
+	var flexComponents []linebot.FlexComponent
+	flexComponents = append(flexComponents, &linebot.BoxComponent{
+		Type:   linebot.FlexComponentTypeBox,
+		Layout: linebot.FlexBoxLayoutTypeHorizontal,
+		Contents: []linebot.FlexComponent{
+			&linebot.TextComponent{
+				Type:   linebot.FlexComponentTypeText,
+				Text:   "編號",
+				Size:   linebot.FlexTextSizeTypeSm,
+				Color:  "#555555",
+				Weight: linebot.FlexTextWeightTypeBold,
+				Align:  linebot.FlexComponentAlignTypeCenter,
+			},
+			&linebot.TextComponent{
+				Type:   linebot.FlexComponentTypeText,
+				Text:   "日期",
+				Size:   linebot.FlexTextSizeTypeSm,
+				Color:  "#555555",
+				Weight: linebot.FlexTextWeightTypeBold,
+				Align:  linebot.FlexComponentAlignTypeCenter,
+			},
+			&linebot.TextComponent{
+				Type:   linebot.FlexComponentTypeText,
+				Text:   "項目",
+				Size:   linebot.FlexTextSizeTypeSm,
+				Color:  "#555555",
+				Weight: linebot.FlexTextWeightTypeBold,
+				Align:  linebot.FlexComponentAlignTypeCenter,
+			},
+			&linebot.TextComponent{
+				Type:   linebot.FlexComponentTypeText,
+				Text:   "花費",
+				Size:   linebot.FlexTextSizeTypeSm,
+				Color:  "#555555",
+				Weight: linebot.FlexTextWeightTypeBold,
+				Align:  linebot.FlexComponentAlignTypeCenter,
+			},
+		},
+	})
+
+	for _, BalanceObj := range summaryFlexMsg.BalanceObjs {
+		flexComponents = append(flexComponents, &linebot.BoxComponent{
+			Type:   linebot.FlexComponentTypeBox,
+			Layout: linebot.FlexBoxLayoutTypeHorizontal,
+			Contents: []linebot.FlexComponent{
+				&linebot.TextComponent{
+					Type:   linebot.FlexComponentTypeText,
+					Text:   strconv.Itoa(BalanceObj.ID),
+					Size:   linebot.FlexTextSizeTypeXxs,
+					Color:  "#555555",
+					Weight: linebot.FlexTextWeightTypeBold,
+					Align:  linebot.FlexComponentAlignTypeCenter,
+				},
+				&linebot.TextComponent{
+					Type:   linebot.FlexComponentTypeText,
+					Text:   BalanceObj.Date,
+					Size:   linebot.FlexTextSizeTypeXxs,
+					Color:  "#555555",
+					Weight: linebot.FlexTextWeightTypeBold,
+					Align:  linebot.FlexComponentAlignTypeCenter,
+				},
+				&linebot.TextComponent{
+					Type:   linebot.FlexComponentTypeText,
+					Text:   helper.KeyNameConvertToZhTw(BalanceObj.Item),
+					Size:   linebot.FlexTextSizeTypeXxs,
+					Color:  "#555555",
+					Weight: linebot.FlexTextWeightTypeBold,
+					Align:  linebot.FlexComponentAlignTypeCenter,
+				},
+				&linebot.TextComponent{
+					Type: linebot.FlexComponentTypeText,
+					Text: func() string {
+						if BalanceObj.Type == global.Income {
+							return "+" + strconv.Itoa(BalanceObj.Amount)
+						}
+						return strconv.Itoa(BalanceObj.Amount)
+					}(),
+					Size:   linebot.FlexTextSizeTypeXxs,
+					Color:  "#555555",
+					Weight: linebot.FlexTextWeightTypeBold,
+					Align:  linebot.FlexComponentAlignTypeCenter,
+				},
+			},
+		})
+	}
+
+	return linebot.NewFlexMessage(msgTitle, &linebot.BubbleContainer{
+		Body: &linebot.BoxComponent{
+			Type:   linebot.FlexComponentTypeBox,
+			Layout: linebot.FlexBoxLayoutTypeVertical,
+			Contents: []linebot.FlexComponent{
+				&linebot.TextComponent{
+					Type:   linebot.FlexComponentTypeText,
+					Text:   msgTitle,
+					Weight: linebot.FlexTextWeightTypeBold,
+					Color:  "#1DB446",
+					Size:   linebot.FlexTextSizeTypeSm,
+				},
+				&linebot.SeparatorComponent{
+					Margin: linebot.FlexComponentMarginTypeSm,
+				},
+				&linebot.TextComponent{
+					Type:   linebot.FlexComponentTypeText,
+					Text:   "已支出",
+					Weight: linebot.FlexTextWeightTypeBold,
+					Size:   linebot.FlexTextSizeTypeLg,
+					Margin: linebot.FlexComponentMarginTypeMd,
+				},
+				&linebot.TextComponent{
+					Type: linebot.FlexComponentTypeText,
+					Text: "$" + strconv.Itoa(summaryFlexMsg.TotalExpenses),
+				},
+				&linebot.TextComponent{
+					Type:   linebot.FlexComponentTypeText,
+					Text:   "結餘",
+					Weight: linebot.FlexTextWeightTypeBold,
+					Size:   linebot.FlexTextSizeTypeLg,
+					Margin: linebot.FlexComponentMarginTypeMd,
+				},
+				&linebot.TextComponent{
+					Type: linebot.FlexComponentTypeText,
+					Text: "$" + strconv.Itoa(summaryFlexMsg.TotalBalance),
+				},
+				&linebot.TextComponent{
+					Type:   linebot.FlexComponentTypeText,
+					Text:   summaryFlexMsg.StartDate + " - " + summaryFlexMsg.EndDate,
+					Size:   linebot.FlexTextSizeTypeXs,
+					Color:  "#aaaaaa",
+					Wrap:   true,
+					Margin: linebot.FlexComponentMarginTypeMd,
+				},
+				&linebot.SeparatorComponent{
+					Margin: linebot.FlexComponentMarginTypeSm,
+				},
+				&linebot.BoxComponent{
+					Type:     linebot.FlexComponentTypeBox,
+					Layout:   linebot.FlexBoxLayoutTypeVertical,
+					Margin:   linebot.FlexComponentMarginTypeLg,
+					Spacing:  linebot.FlexComponentSpacingTypeSm,
+					Contents: flexComponents,
+				},
+			},
+		},
+	})
+}

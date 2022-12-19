@@ -164,7 +164,18 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 				template := linebot.NewTextMessage(global.SuccessDeleteZhTw)
 				h.replyMessageToUser(event.ReplyToken, template)
 			case global.JanSummary, global.FebSummary, global.MarSummary, global.AprSummary, global.MaySummary, global.JunSummary, global.JulSummary, global.AugSummary, global.SepSummary, global.OctSummary, global.NovSummary, global.DecSummary:
-				h.DailyBalanceService.GetDailyBalancesByMonth(user.ID, helper.KeyNameConvertToMonth(data))
+				month := helper.KeyNameConvertToMonth(data)
+				balanceObjs := h.DailyBalanceService.GetDailyBalancesByMonth(user.ID, month)
+				balanceSum := h.DailyBalanceService.GetTotalBalanceByMonth(user.ID, month)
+				dateFormat := helper.GetIntervalDateFormat(month)
+				template := h.LineBotService.ShowSummaryFlexMessage(strconv.Itoa(month)+"月總結", structs.SummaryFlexMsg{
+					StartDate:     dateFormat.StartDate,
+					EndDate:       dateFormat.EndDate,
+					BalanceObjs:   balanceObjs,
+					TotalExpenses: balanceSum.TotalExpense,
+					TotalBalance:  balanceSum.TotalBalance,
+				})
+				h.replyMessageToUser(event.ReplyToken, template)
 			}
 		}
 	}
