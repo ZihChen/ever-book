@@ -6,6 +6,7 @@ import (
 	"ever-book/app/global/structs"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 	"strconv"
+	"strings"
 )
 
 func (s *service) ShowTmpBalanceFlexMessage(msgTitle string, tmpBalanceObj structs.TmpBalanceObj) *linebot.FlexMessage {
@@ -410,11 +411,15 @@ func (s *service) ShowSummaryFlexMessage(msgTitle string, summaryFlexMsg structs
 				},
 				&linebot.TextComponent{
 					Type: linebot.FlexComponentTypeText,
-					Text: func() string {
+					Text: func() (amount string) {
+						amount = strconv.Itoa(BalanceObj.Amount)
 						if BalanceObj.Type == global.Income {
-							return "+" + strconv.Itoa(BalanceObj.Amount)
+							var balanceAmount strings.Builder
+							balanceAmount.WriteString("+")
+							balanceAmount.WriteString(amount)
+							return balanceAmount.String()
 						}
-						return strconv.Itoa(BalanceObj.Amount)
+						return
 					}(),
 					Size:   linebot.FlexTextSizeTypeXxs,
 					Color:  "#555555",
@@ -449,7 +454,12 @@ func (s *service) ShowSummaryFlexMessage(msgTitle string, summaryFlexMsg structs
 				},
 				&linebot.TextComponent{
 					Type: linebot.FlexComponentTypeText,
-					Text: "$" + strconv.Itoa(summaryFlexMsg.TotalExpenses),
+					Text: func() string {
+						var totalExpenses strings.Builder
+						totalExpenses.WriteString("$")
+						totalExpenses.WriteString(strconv.Itoa(summaryFlexMsg.TotalExpenses))
+						return totalExpenses.String()
+					}(),
 				},
 				&linebot.TextComponent{
 					Type:   linebot.FlexComponentTypeText,
@@ -460,11 +470,22 @@ func (s *service) ShowSummaryFlexMessage(msgTitle string, summaryFlexMsg structs
 				},
 				&linebot.TextComponent{
 					Type: linebot.FlexComponentTypeText,
-					Text: "$" + strconv.Itoa(summaryFlexMsg.TotalBalance),
+					Text: func() string {
+						var totalBalance strings.Builder
+						totalBalance.WriteString("$")
+						totalBalance.WriteString(strconv.Itoa(summaryFlexMsg.TotalBalance))
+						return totalBalance.String()
+					}(),
 				},
 				&linebot.TextComponent{
-					Type:   linebot.FlexComponentTypeText,
-					Text:   summaryFlexMsg.StartDate + " - " + summaryFlexMsg.EndDate,
+					Type: linebot.FlexComponentTypeText,
+					Text: func() string {
+						var duringDate strings.Builder
+						duringDate.WriteString(summaryFlexMsg.StartDate)
+						duringDate.WriteString(" - ")
+						duringDate.WriteString(summaryFlexMsg.EndDate)
+						return duringDate.String()
+					}(),
 					Size:   linebot.FlexTextSizeTypeXs,
 					Color:  "#aaaaaa",
 					Wrap:   true,

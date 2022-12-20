@@ -8,6 +8,7 @@ import (
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 	"log"
 	"strconv"
+	"strings"
 )
 
 var bot *linebot.Client
@@ -168,7 +169,12 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 				balanceObjs := h.DailyBalanceService.GetDailyBalancesByMonth(user.ID, month)
 				balanceSum := h.DailyBalanceService.GetTotalBalanceByMonth(user.ID, month)
 				dateFormat := helper.GetIntervalDateFormat(month)
-				template := h.LineBotService.ShowSummaryFlexMessage(strconv.Itoa(month)+"月總結", structs.SummaryFlexMsg{
+				template := h.LineBotService.ShowSummaryFlexMessage(func() string {
+					var msgTitle strings.Builder
+					msgTitle.WriteString(strconv.Itoa(month))
+					msgTitle.WriteString("月總結")
+					return msgTitle.String()
+				}(), structs.SummaryFlexMsg{
 					StartDate:     dateFormat.StartDate,
 					EndDate:       dateFormat.EndDate,
 					BalanceObjs:   balanceObjs,
