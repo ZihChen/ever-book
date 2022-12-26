@@ -56,3 +56,8 @@ type BalanceSummaryObj struct {
 	TotalExpense int `json:"total_expenses"`
 	TotalBalance int `json:"total_balance"`
 }
+
+type UserFields struct {
+	UUID string `json:"uuid"`
+	Name string `json:"name"`
+}

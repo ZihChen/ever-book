@@ -9,7 +9,7 @@ import (
 
 type Interface interface {
 	GetUserByUUID(uuid string) (user model.User)
-	CreateUserByUUID(uuid string) (user model.User)
+	CreateUserByMap(userMap map[string]interface{})
 }
 
 type repository struct {
@@ -38,13 +38,11 @@ func (r *repository) GetUserByUUID(uuid string) (user model.User) {
 	return
 }
 
-func (r *repository) CreateUserByUUID(uuid string) (user model.User) {
+func (r *repository) CreateUserByMap(userMap map[string]interface{}) {
 	db := r.DB.GetConnection()
 
-	if err := db.Model(&user).Create(map[string]interface{}{
-		"uuid": uuid,
-	}).Error; err != nil {
-		log.Fatalf("Create User By UUID Error:%v", err.Error())
+	if err := db.Model(&model.User{}).Create(userMap).Error; err != nil {
+		log.Fatalf("Create User By Map Error:%v", err.Error())
 		return
 	}
 

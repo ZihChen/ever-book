@@ -1,13 +1,15 @@
 package userservice
 
 import (
+	"ever-book/app/global/helper"
+	"ever-book/app/global/structs"
 	"ever-book/app/model"
 	"ever-book/app/repository/userrepo"
 	"sync"
 )
 
 type Interface interface {
-	GetOrCreateUser(uuid string) (user model.User)
+	GetOrCreateUser(userFields structs.UserFields) (user model.User)
 }
 
 type service struct {
@@ -26,14 +28,12 @@ func New() Interface {
 	return singleton
 }
 
-func (s *service) GetOrCreateUser(uuid string) (user model.User) {
-	user = s.UserRepo.GetUserByUUID(uuid)
+func (s *service) GetOrCreateUser(userFields structs.UserFields) (user model.User) {
+	user = s.UserRepo.GetUserByUUID(userFields.UUID)
 	if user.ID != 0 {
 		return
 	}
-
-	s.UserRepo.CreateUserByUUID(uuid)
-	user = s.UserRepo.GetUserByUUID(uuid)
-
+	s.UserRepo.CreateUserByMap(helper.StructToMap(userFields))
+	user = s.UserRepo.GetUserByUUID(userFields.UUID)
 	return
 }

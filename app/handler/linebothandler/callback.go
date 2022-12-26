@@ -20,7 +20,15 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 		log.Fatalf(err.Error())
 	}
 	for _, event := range events {
-		user := h.UserService.GetOrCreateUser(event.Source.UserID)
+		sourceID := event.Source.UserID
+		user := h.UserService.GetOrCreateUser(structs.UserFields{
+			UUID: sourceID,
+			Name: func() string {
+				profile, _ := bot.GetProfile(sourceID).Do()
+				return profile.DisplayName
+			}(),
+		})
+
 		switch event.Type {
 		case linebot.EventTypeMessage:
 			switch message := event.Message.(type) {
