@@ -347,14 +347,6 @@ func (s *service) ShowSummaryFlexMessage(msgTitle string, summaryFlexMsg structs
 		Contents: []linebot.FlexComponent{
 			&linebot.TextComponent{
 				Type:   linebot.FlexComponentTypeText,
-				Text:   "編號",
-				Size:   linebot.FlexTextSizeTypeSm,
-				Color:  "#555555",
-				Weight: linebot.FlexTextWeightTypeBold,
-				Align:  linebot.FlexComponentAlignTypeCenter,
-			},
-			&linebot.TextComponent{
-				Type:   linebot.FlexComponentTypeText,
 				Text:   "日期",
 				Size:   linebot.FlexTextSizeTypeSm,
 				Color:  "#555555",
@@ -377,6 +369,14 @@ func (s *service) ShowSummaryFlexMessage(msgTitle string, summaryFlexMsg structs
 				Weight: linebot.FlexTextWeightTypeBold,
 				Align:  linebot.FlexComponentAlignTypeCenter,
 			},
+			&linebot.TextComponent{
+				Type:   linebot.FlexComponentTypeText,
+				Text:   "備註",
+				Size:   linebot.FlexTextSizeTypeSm,
+				Color:  "#555555",
+				Weight: linebot.FlexTextWeightTypeBold,
+				Align:  linebot.FlexComponentAlignTypeCenter,
+			},
 		},
 	})
 
@@ -385,14 +385,6 @@ func (s *service) ShowSummaryFlexMessage(msgTitle string, summaryFlexMsg structs
 			Type:   linebot.FlexComponentTypeBox,
 			Layout: linebot.FlexBoxLayoutTypeHorizontal,
 			Contents: []linebot.FlexComponent{
-				&linebot.TextComponent{
-					Type:   linebot.FlexComponentTypeText,
-					Text:   strconv.Itoa(BalanceObj.ID),
-					Size:   linebot.FlexTextSizeTypeXxs,
-					Color:  "#555555",
-					Weight: linebot.FlexTextWeightTypeBold,
-					Align:  linebot.FlexComponentAlignTypeCenter,
-				},
 				&linebot.TextComponent{
 					Type:   linebot.FlexComponentTypeText,
 					Text:   BalanceObj.Date,
@@ -420,6 +412,19 @@ func (s *service) ShowSummaryFlexMessage(msgTitle string, summaryFlexMsg structs
 							return balanceAmount.String()
 						}
 						return
+					}(),
+					Size:   linebot.FlexTextSizeTypeXxs,
+					Color:  "#555555",
+					Weight: linebot.FlexTextWeightTypeBold,
+					Align:  linebot.FlexComponentAlignTypeCenter,
+				},
+				&linebot.TextComponent{
+					Type: linebot.FlexComponentTypeText,
+					Text: func() string {
+						if BalanceObj.Remark == "" {
+							return "-"
+						}
+						return BalanceObj.Remark
 					}(),
 					Size:   linebot.FlexTextSizeTypeXxs,
 					Color:  "#555555",
