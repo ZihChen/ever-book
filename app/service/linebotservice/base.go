@@ -11,6 +11,7 @@ import (
 
 type Interface interface {
 	GetClient() *linebot.Client
+	ShowIsNeedDateAndRemarkOptionTemplate() *linebot.TemplateMessage
 	ShowBalanceDateOptionTemplate() *linebot.TemplateMessage
 	ShowBalanceTypeOptionTemplate() *linebot.TemplateMessage
 	ShowBalanceItemOptionTemplate() *linebot.TemplateMessage

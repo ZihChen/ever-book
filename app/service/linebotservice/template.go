@@ -4,6 +4,7 @@ import (
 	"ever-book/app/global"
 	"ever-book/app/global/helper"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
+	"strings"
 	"time"
 )
 
@@ -14,13 +15,8 @@ func (s *service) ShowBalanceDateOptionTemplate() *linebot.TemplateMessage {
 			{
 				Text: global.BalanceDateOptionZhTw,
 				Actions: []linebot.TemplateAction{
-					&linebot.PostbackAction{
-						Label: global.TodayZhTw,
-						Text:  global.TodayZhTw,
-						Data:  global.Today,
-					},
 					&linebot.DatetimePickerAction{
-						Label:   global.DateZhTw,
+						Label:   global.ClickZhTw,
 						Mode:    global.Date,
 						Data:    global.Date,
 						Initial: nowDate,
@@ -62,8 +58,10 @@ func (s *service) ShowBalanceItemOptionTemplate() (template *linebot.TemplateMes
 				Data:  helper.ZhTwConvertToKeyName(item),
 			})
 		}
+		str := strings.Split(name, "-")
 		itemGroup := &linebot.CarouselColumn{
-			Text:    name,
+			Title:   str[0],
+			Text:    str[1],
 			Actions: actions,
 		}
 		carouselColumn = append(carouselColumn, itemGroup)
@@ -158,8 +156,8 @@ func (s *service) ShowMonthOptionTemplate() (template *linebot.TemplateMessage) 
 	var monthsArr []int
 	nowMonth := time.Now().Month()
 	monthsArr = append(monthsArr, int(nowMonth))
-	for i := 1; i <= 2 ; i ++ {
-		month := time.Now().AddDate(0,-i,0).Month()
+	for i := 1; i <= 2; i++ {
+		month := time.Now().AddDate(0, -i, 0).Month()
 		monthsArr = append(monthsArr, int(month))
 	}
 	var actions []linebot.TemplateAction
@@ -176,5 +174,33 @@ func (s *service) ShowMonthOptionTemplate() (template *linebot.TemplateMessage) 
 	})
 	return linebot.NewTemplateMessage(global.BalanceMonthOptionZhTw, &linebot.CarouselTemplate{
 		Columns: carouselColumn,
+	})
+}
+
+func (s *service) ShowIsNeedDateAndRemarkOptionTemplate() *linebot.TemplateMessage {
+
+	return linebot.NewTemplateMessage(global.IsNeedDateAndRemarkOptionZhTw, &linebot.CarouselTemplate{
+		Columns: []*linebot.CarouselColumn{
+			{
+				Text: global.IsNeedDateAndRemarkOptionZhTw,
+				Actions: []linebot.TemplateAction{
+					&linebot.PostbackAction{
+						Label: global.TypeDateZhTw,
+						Text:  global.TypeDateZhTw,
+						Data:  global.TypeDate,
+					},
+					&linebot.PostbackAction{
+						Label: global.TypeRemarkZhTw,
+						Text:  global.TypeRemarkZhTw,
+						Data:  global.TypeRemark,
+					},
+					&linebot.PostbackAction{
+						Label: global.SkipZhTw,
+						Text:  global.SkipZhTw,
+						Data:  global.Skip,
+					},
+				},
+			},
+		},
 	})
 }

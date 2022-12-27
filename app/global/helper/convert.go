@@ -62,6 +62,10 @@ func ZhTwConvertToKeyName(str string) string {
 		return global.CreditCard
 	case global.CashZhTw:
 		return global.Cash
+	case global.SalaryZhTw:
+		return global.Salary
+	case global.OtherIncomeZhTw:
+		return global.OtherIncome
 	default:
 		return ""
 	}
@@ -127,6 +131,10 @@ func KeyNameConvertToZhTw(str string) string {
 		return global.CreditCardZhTw
 	case global.Cash:
 		return global.CashZhTw
+	case global.Salary:
+		return global.SalaryZhTw
+	case global.OtherIncome:
+		return global.OtherIncomeZhTw
 	default:
 		return ""
 	}
