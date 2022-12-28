@@ -66,6 +66,15 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 					monthOption := h.LineBotService.ShowMonthOptionTemplate()
 					h.replyMessageToUser(event.ReplyToken, monthOption)
 					return
+				case global.DeletePreviousRecordZhTw:
+					balance, exist := h.DailyBalanceService.GetLatestDailyBalance(user.ID)
+					if !exist {
+						// TODO: 回傳沒有資料可以刪除
+					}
+					cancelTemplate := h.LineBotService.ShowCancelBalanceFlexMessage("您要刪除下列資料:", balance)
+					cancelOption := h.LineBotService.ShowCancelOrNotOptionTemplate()
+					h.replyMessageToUser(event.ReplyToken, cancelTemplate, cancelOption)
+					return
 				case global.TodayZhTw, global.IncomeZhTw, global.ExpenseZhTw, global.CashZhTw, global.CreditCardZhTw, global.ConsumeGoodsZhTw, global.FruitZhTw, global.WaterBillZhTw, global.OilFeeZhTw,
 					global.BreakfastZhTw, global.LunchZhTw, global.DinnerZhTw, global.RepairRewardZhTw, global.GasFeeZhTw, global.InsuranceZhTw, global.LivingExpensesZhTw, global.OrganicFoodZhTw, global.DressFeeZhTw,
 					global.HealthyFoodZhTw, global.AutomaticDeductionZhTw, global.ElectricBillZhTw, global.FishZhTW, global.MedicalZhTw, global.TicketZhTw, global.GardeningZhTw, global.GroceryShoppingZhTw,
