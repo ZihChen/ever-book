@@ -23,6 +23,7 @@ type Interface interface {
 	ShowCancelBalanceFlexMessage(msgTitle string, tmpBalanceObj structs.TmpBalanceObj) *linebot.FlexMessage
 	ShowMonthOptionTemplate() *linebot.TemplateMessage
 	ShowSummaryFlexMessage(msgTitle string, summaryFlexMsg structs.SummaryFlexMsg) *linebot.FlexMessage
+	ShowUserGroupOption() *linebot.TemplateMessage
 }
 
 type service struct{}

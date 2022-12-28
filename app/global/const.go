@@ -48,6 +48,8 @@ const (
 	CancelDelete       string = "cancel_delete"
 	TypeDate           string = "type_date"
 	TypeRemark         string = "type_remark"
+	CheckOtherBalance  string = "check_other_balance"
+	BindOtherBalance   string = "bind_other_balance"
 )
 
 const (
@@ -118,6 +120,10 @@ const (
 	TypeRemarkZhTw                string = "輸入備註"
 	IsNeedDateAndRemarkOptionZhTw string = "需不需要額外填寫日期與備註?"
 	SkipZhTw                      string = "省略"
+	CheckOtherBalanceZhTw         string = "查看成員帳本"
+	BindOtherBalanceZhTw          string = "綁定成員"
+	FamilyBalanceZhTw             string = "查看家庭帳本"
+	FamilyBalanceOptionZhTw       string = "選擇操作項目"
 )
 
 type TemporaryBalanceColumn string

@@ -61,10 +61,15 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 						h.replyMessageToUser(event.ReplyToken, amountTemplate)
 					}
 					return
-				//查看帳本
+				// 查看帳本
 				case global.AccountBookSummaryZhTw:
 					monthOption := h.LineBotService.ShowMonthOptionTemplate()
 					h.replyMessageToUser(event.ReplyToken, monthOption)
+					return
+				// 家庭帳本
+				case global.FamilyBalanceZhTw:
+					template := h.LineBotService.ShowUserGroupOption()
+					h.replyMessageToUser(event.ReplyToken, template)
 					return
 				case global.DeletePreviousRecordZhTw:
 					balance, exist := h.DailyBalanceService.GetLatestDailyBalance(user.ID)

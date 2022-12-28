@@ -204,3 +204,25 @@ func (s *service) ShowIsNeedDateAndRemarkOptionTemplate() *linebot.TemplateMessa
 		},
 	})
 }
+
+func (s *service) ShowUserGroupOption() *linebot.TemplateMessage {
+	return linebot.NewTemplateMessage(global.FamilyBalanceOptionZhTw, &linebot.CarouselTemplate{
+		Columns: []*linebot.CarouselColumn{
+			{
+				Text: global.FamilyBalanceOptionZhTw,
+				Actions: []linebot.TemplateAction{
+					&linebot.PostbackAction{
+						Label: global.CheckOtherBalanceZhTw,
+						Text:  global.CheckOtherBalanceZhTw,
+						Data:  global.CheckOtherBalance,
+					},
+					&linebot.PostbackAction{
+						Label: global.BindOtherBalanceZhTw,
+						Text:  global.BindOtherBalanceZhTw,
+						Data:  global.BindOtherBalance,
+					},
+				},
+			},
+		},
+	})
+}
