@@ -4,6 +4,7 @@ import (
 	"ever-book/app/service/dailybalanceservice"
 	"ever-book/app/service/linebotservice"
 	"ever-book/app/service/tmpbalanceservice"
+	"ever-book/app/service/usermemberservice"
 	"ever-book/app/service/userservice"
 )
 
@@ -12,6 +13,7 @@ type Handler struct {
 	UserService         userservice.Interface
 	TmpBalanceService   tmpbalanceservice.Interface
 	DailyBalanceService dailybalanceservice.Interface
+	UserMapService      usermemberservice.Interface
 }
 
 func New() *Handler {
@@ -20,5 +22,6 @@ func New() *Handler {
 		UserService:         userservice.New(),
 		TmpBalanceService:   tmpbalanceservice.New(),
 		DailyBalanceService: dailybalanceservice.New(),
+		UserMapService:      usermemberservice.New(),
 	}
 }

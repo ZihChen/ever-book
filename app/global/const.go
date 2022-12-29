@@ -124,6 +124,7 @@ const (
 	BindOtherBalanceZhTw          string = "綁定成員"
 	FamilyBalanceZhTw             string = "查看家庭帳本"
 	FamilyBalanceOptionZhTw       string = "選擇操作項目"
+	SuccessBindingZhTw            string = "綁定成功"
 )
 
 type TemporaryBalanceColumn string

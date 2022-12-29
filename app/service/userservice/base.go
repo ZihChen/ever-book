@@ -10,6 +10,7 @@ import (
 
 type Interface interface {
 	GetOrCreateUser(userFields structs.UserFields) (user model.User)
+	GetUserList(userID int) (userList []structs.UserObj)
 }
 
 type service struct {
@@ -35,5 +36,18 @@ func (s *service) GetOrCreateUser(userFields structs.UserFields) (user model.Use
 	}
 	s.UserRepo.CreateUserByMap(helper.StructToMap(userFields))
 	user = s.UserRepo.GetUserByUUID(userFields.UUID)
+	return
+}
+
+func (s *service) GetUserList(userID int) (userList []structs.UserObj) {
+	users := s.UserRepo.GetUserList()
+	for _, user := range users {
+		if user.ID != userID {
+			userList = append(userList, structs.UserObj{
+				ID:   user.ID,
+				Name: user.Name,
+			})
+		}
+	}
 	return
 }

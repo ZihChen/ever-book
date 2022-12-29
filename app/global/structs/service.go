@@ -61,3 +61,8 @@ type UserFields struct {
 	UUID string `json:"uuid"`
 	Name string `json:"name"`
 }
+
+type UserObj struct {
+	ID   int    `json:"id"`
+	Name string `json:"name"`
+}

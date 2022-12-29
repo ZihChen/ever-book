@@ -24,6 +24,7 @@ type Interface interface {
 	ShowMonthOptionTemplate() *linebot.TemplateMessage
 	ShowSummaryFlexMessage(msgTitle string, summaryFlexMsg structs.SummaryFlexMsg) *linebot.FlexMessage
 	ShowUserGroupOption() *linebot.TemplateMessage
+	ShowUserListOption(userList []structs.UserObj) *linebot.TemplateMessage
 }
 
 type service struct{}

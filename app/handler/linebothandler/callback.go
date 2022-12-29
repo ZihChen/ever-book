@@ -47,6 +47,18 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 					return
 				}
 
+				// 選擇綁定成員
+				if strings.Contains(message.Text, "綁定：") {
+					strSp := strings.Split(message.Text, "-")
+					h.UserMapService.BindUserMember(user, func() int {
+						bindID, _ := strconv.Atoi(strSp[1])
+						return bindID
+					}())
+					template := linebot.NewTextMessage(global.SuccessBindingZhTw)
+					h.replyMessageToUser(event.ReplyToken, template)
+					return
+				}
+
 				switch message.Text {
 				// 記帳起始步驟
 				case global.RecordBalanceZhTw:
@@ -84,7 +96,8 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 					global.BreakfastZhTw, global.LunchZhTw, global.DinnerZhTw, global.RepairRewardZhTw, global.GasFeeZhTw, global.InsuranceZhTw, global.LivingExpensesZhTw, global.OrganicFoodZhTw, global.DressFeeZhTw,
 					global.HealthyFoodZhTw, global.AutomaticDeductionZhTw, global.ElectricBillZhTw, global.FishZhTW, global.MedicalZhTw, global.TicketZhTw, global.GardeningZhTw, global.GroceryShoppingZhTw,
 					global.EasyCardZhTw, global.ManagementCostZhTw, global.PayBillZhTw, global.PottedPlantZhTw, global.ContinueZhTw, global.DiscardZhTw, global.NeedRemarkZhTw, global.SkipRemarkZhTw, global.ConfirmZhTw, global.CancelZhTw,
-					global.JanZhTw, global.FebZhTw, global.MarZhTw, global.AprZhTw, global.MayZhTw, global.JunZhTw, global.JulZhTw, global.AugZhTw, global.SepZhTw, global.OctZhTw, global.NovZhTw, global.DecZhTw, global.TypeDateZhTw, global.TypeRemarkZhTw:
+					global.JanZhTw, global.FebZhTw, global.MarZhTw, global.AprZhTw, global.MayZhTw, global.JunZhTw, global.JulZhTw, global.AugZhTw, global.SepZhTw, global.OctZhTw, global.NovZhTw, global.DecZhTw, global.TypeDateZhTw, global.TypeRemarkZhTw,
+					global.BindOtherBalanceZhTw:
 					// 避免觸發寫入備註
 					return
 				default:
@@ -238,6 +251,11 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 				})
 				h.replyMessageToUser(event.ReplyToken, template)
 				return
+			// 綁定家庭帳本成員
+			case global.BindOtherBalance:
+				userList := h.UserService.GetUserList(user.ID)
+				template := h.LineBotService.ShowUserListOption(userList)
+				h.replyMessageToUser(event.ReplyToken, template)
 			}
 		}
 	}

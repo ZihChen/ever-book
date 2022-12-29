@@ -3,7 +3,10 @@ package linebotservice
 import (
 	"ever-book/app/global"
 	"ever-book/app/global/helper"
+	"ever-book/app/global/structs"
+	"fmt"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -224,5 +227,22 @@ func (s *service) ShowUserGroupOption() *linebot.TemplateMessage {
 				},
 			},
 		},
+	})
+}
+
+func (s *service) ShowUserListOption(userList []structs.UserObj) *linebot.TemplateMessage {
+	return linebot.NewTemplateMessage("選擇綁定成員", &linebot.ButtonsTemplate{
+		Title: "選擇綁定成員",
+		Text:  "如下:",
+		Actions: func() (templateActions []linebot.TemplateAction) {
+			for _, user := range userList {
+				templateActions = append(templateActions, &linebot.PostbackAction{
+					Label: user.Name,
+					Text:  fmt.Sprintf("綁定：%s-%s", user.Name, strconv.Itoa(user.ID)),
+					Data:  fmt.Sprintf("user-bind-%s", strconv.Itoa(user.ID)),
+				})
+			}
+			return
+		}(),
 	})
 }
