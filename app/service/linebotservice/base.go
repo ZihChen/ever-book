@@ -10,20 +10,33 @@ import (
 )
 
 type Interface interface {
+	// GetClient 取得 Line-bot 實例
 	GetClient() *linebot.Client
+	// ShowIsNeedDateAndRemarkOptionTemplate 是否需要日期、備註選項視窗
 	ShowIsNeedDateAndRemarkOptionTemplate() *linebot.TemplateMessage
+	// ShowBalanceDateOptionTemplate 填寫指定日期視窗
 	ShowBalanceDateOptionTemplate() *linebot.TemplateMessage
-	ShowBalanceTypeOptionTemplate() *linebot.TemplateMessage
+	// ShowBalanceItemOptionTemplate 選擇消費項目選項視窗
 	ShowBalanceItemOptionTemplate() *linebot.TemplateMessage
+	// ShowBalancePaymentOptionTemplate 選擇消費方式選項視窗
 	ShowBalancePaymentOptionTemplate() *linebot.TemplateMessage
+	// ShowBalanceRemarkOptionTemplate 是否填寫備註選項視窗
 	ShowBalanceRemarkOptionTemplate() *linebot.TemplateMessage
+	// ShowContinueOrDiscardOptionTemplate 繼續填寫或是捨棄選項視窗
 	ShowContinueOrDiscardOptionTemplate() *linebot.TemplateMessage
+	// ShowCancelOrNotOptionTemplate 確認是否刪除選項視窗
 	ShowCancelOrNotOptionTemplate() *linebot.TemplateMessage
+	// ShowTmpBalanceFlexMessage 顯示編輯當下的收支紀錄訊息
 	ShowTmpBalanceFlexMessage(msgTitle string, tmpBalanceObj structs.TmpBalanceObj) *linebot.FlexMessage
+	// ShowCancelBalanceFlexMessage 顯示即將刪除的收支紀錄訊息
 	ShowCancelBalanceFlexMessage(msgTitle string, tmpBalanceObj structs.TmpBalanceObj) *linebot.FlexMessage
+	// ShowMonthOptionTemplate 顯示含當月及過去兩個月的月份選項視窗
 	ShowMonthOptionTemplate() *linebot.TemplateMessage
+	// ShowSummaryFlexMessage 顯示收支統計訊息
 	ShowSummaryFlexMessage(msgTitle string, summaryFlexMsg structs.SummaryFlexMsg) *linebot.FlexMessage
+	// ShowUserGroupOption 選擇要查看其他人帳本還是綁定成員選項
 	ShowUserGroupOption() *linebot.TemplateMessage
+	// ShowUserListOption 顯示可選擇綁定的所有成員選項視窗
 	ShowUserListOption(userList []structs.UserObj) *linebot.TemplateMessage
 }
 

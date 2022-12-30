@@ -31,25 +31,6 @@ func (s *service) ShowBalanceDateOptionTemplate() *linebot.TemplateMessage {
 	})
 }
 
-func (s *service) ShowBalanceTypeOptionTemplate() *linebot.TemplateMessage {
-	return linebot.NewTemplateMessage(
-		global.BalanceTypeOptionZhTw,
-		linebot.NewConfirmTemplate(
-			global.BalanceTypeOptionZhTw,
-			&linebot.PostbackAction{
-				Label: global.IncomeZhTw,
-				Text:  global.IncomeZhTw,
-				Data:  global.Income,
-			},
-			&linebot.PostbackAction{
-				Label: global.ExpenseZhTw,
-				Text:  global.ExpenseZhTw,
-				Data:  global.Expense,
-			},
-		),
-	)
-}
-
 func (s *service) ShowBalanceItemOptionTemplate() (template *linebot.TemplateMessage) {
 	var carouselColumn []*linebot.CarouselColumn
 	for name, group := range global.BalanceItems {
