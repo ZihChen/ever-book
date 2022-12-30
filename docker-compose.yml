@@ -26,7 +26,7 @@ services:
     container_name: ${PROJECT_NAME}-db
     restart: always
     volumes:
-      - /home/winston/DB/${PROJECT_NAME}:/var/lib/mysql
+      - ${USER_PATH}/DB/${PROJECT_NAME}:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: everbook
