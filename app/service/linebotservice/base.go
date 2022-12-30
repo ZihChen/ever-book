@@ -2,6 +2,7 @@ package linebotservice
 
 import (
 	"ever-book/app/global/structs"
+	"ever-book/app/model"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 	"log"
 	"net/http"
@@ -38,6 +39,8 @@ type Interface interface {
 	ShowUserGroupOption() *linebot.TemplateMessage
 	// ShowUserListOption 顯示可選擇綁定的所有成員選項視窗
 	ShowUserListOption(userList []structs.UserObj) *linebot.TemplateMessage
+	// ShowMemberListOption 顯示已綁定的使用者選項視窗
+	ShowMemberListOption(users []model.User) *linebot.TemplateMessage
 }
 
 type service struct{}

@@ -4,6 +4,7 @@ import (
 	"ever-book/app/global"
 	"ever-book/app/global/helper"
 	"ever-book/app/global/structs"
+	"ever-book/app/model"
 	"fmt"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 	"strconv"
@@ -221,6 +222,23 @@ func (s *service) ShowUserListOption(userList []structs.UserObj) *linebot.Templa
 					Label: user.Name,
 					Text:  fmt.Sprintf("綁定：%s", user.Name),
 					Data:  fmt.Sprintf("user-bind-%s", strconv.Itoa(user.ID)),
+				})
+			}
+			return
+		}(),
+	})
+}
+
+func (s *service) ShowMemberListOption(users []model.User) *linebot.TemplateMessage {
+	return linebot.NewTemplateMessage("成員列表", &linebot.ButtonsTemplate{
+		Title: "請選擇查看誰的帳本",
+		Text:  "成員列表:",
+		Actions: func() (templateActions []linebot.TemplateAction) {
+			for _, user := range users {
+				templateActions = append(templateActions, &linebot.PostbackAction{
+					Label: user.Name,
+					Text:  fmt.Sprintf("查看：%s的帳本", user.Name),
+					Data:  fmt.Sprintf("check-other-balance-%s", strconv.Itoa(user.ID)),
 				})
 			}
 			return

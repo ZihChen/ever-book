@@ -162,6 +162,12 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 				userList := h.UserService.GetUserList(user.ID)
 				template := h.LineBotService.ShowUserListOption(userList)
 				h.replyMessageToUser(event.ReplyToken, template)
+				return
+			// 選擇要查看的成員帳本
+			case global.CheckOtherBalance:
+				template := h.LineBotService.ShowMemberListOption(user.Members)
+				h.replyMessageToUser(event.ReplyToken, template)
+				return
 			}
 
 		// Message Type
