@@ -219,7 +219,7 @@ func (s *service) ShowUserListOption(userList []structs.UserObj) *linebot.Templa
 			for _, user := range userList {
 				templateActions = append(templateActions, &linebot.PostbackAction{
 					Label: user.Name,
-					Text:  fmt.Sprintf("綁定：%s-%s", user.Name, strconv.Itoa(user.ID)),
+					Text:  fmt.Sprintf("綁定：%s", user.Name),
 					Data:  fmt.Sprintf("user-bind-%s", strconv.Itoa(user.ID)),
 				})
 			}
