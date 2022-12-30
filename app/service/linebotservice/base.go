@@ -41,6 +41,8 @@ type Interface interface {
 	ShowUserListOption(userList []structs.UserObj) *linebot.TemplateMessage
 	// ShowMemberListOption 顯示已綁定的使用者選項視窗
 	ShowMemberListOption(users []model.User) *linebot.TemplateMessage
+	// ShowMembersBalanceMonthOption 選擇觀看成員帳本指定月份選項視窗
+	ShowMembersBalanceMonthOption(memberID string) (template *linebot.TemplateMessage)
 }
 
 type service struct{}

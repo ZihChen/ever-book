@@ -45,6 +45,28 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 				return
 			}
 
+			// 選擇觀看成員的某個月份帳本
+			if strings.Contains(data, "check-other-balance") {
+				strSp := strings.Split(data, "-")
+				template := h.LineBotService.ShowMembersBalanceMonthOption(strSp[3])
+				h.replyMessageToUser(event.ReplyToken, template)
+				return
+			}
+
+			// 顯示成員帳本
+			if strings.Contains(data, "check-balance-month") {
+				strSp := strings.Split(data, "-")
+				template := h.getSummaryByUserMonth(func() int {
+					userID, _ := strconv.Atoi(strSp[4])
+					return userID
+				}(), func() int {
+					month, _ := strconv.Atoi(strSp[3])
+					return month
+				}())
+				h.replyMessageToUser(event.ReplyToken, template)
+				return
+			}
+
 			switch data {
 			// 選擇消費種類
 			case global.ConsumeGoods, global.Fruit, global.WaterBill, global.OilFee, global.Breakfast, global.Lunch, global.Dinner, global.RepairReward, global.GasFee,
@@ -140,22 +162,7 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 				return
 			case global.JanSummary, global.FebSummary, global.MarSummary, global.AprSummary, global.MaySummary, global.JunSummary, global.JulSummary, global.AugSummary, global.SepSummary, global.OctSummary, global.NovSummary, global.DecSummary:
 				month := helper.KeyNameConvertToMonth(data)
-				balanceObjs := h.DailyBalanceService.GetDailyBalancesByMonth(user.ID, month)
-				balanceSum := h.DailyBalanceService.GetTotalBalanceByMonth(user.ID, month)
-				dateFormat := helper.GetIntervalDateFormat(month)
-				template := h.LineBotService.ShowSummaryFlexMessage(func() string {
-					var msgTitle strings.Builder
-					msgTitle.WriteString(strconv.Itoa(month))
-					msgTitle.WriteString("月總結")
-					return msgTitle.String()
-				}(), structs.SummaryFlexMsg{
-					StartDate:     dateFormat.StartDate,
-					EndDate:       dateFormat.EndDate,
-					BalanceObjs:   balanceObjs,
-					TotalExpenses: balanceSum.TotalExpense,
-					TotalBalance:  balanceSum.TotalBalance,
-				})
-				h.replyMessageToUser(event.ReplyToken, template)
+				h.replyMessageToUser(event.ReplyToken, h.getSummaryByUserMonth(user.ID, month))
 				return
 			// 綁定家庭帳本成員
 			case global.BindOtherBalance:
@@ -283,4 +290,24 @@ func (h *Handler) checkColumnsIsFilled(tmpRecord structs.TmpBalanceObj) (templat
 		template = linebot.NewTextMessage(global.EnterRemarkZhTw)
 	}
 	return
+}
+
+func (h *Handler) getSummaryByUserMonth(userID, month int) *linebot.FlexMessage {
+	balanceObjs := h.DailyBalanceService.GetDailyBalancesByMonth(userID, month)
+	balanceSum := h.DailyBalanceService.GetTotalBalanceByMonth(userID, month)
+	dateFormat := helper.GetIntervalDateFormat(month)
+
+	return h.LineBotService.ShowSummaryFlexMessage(func() string {
+		var msgTitle strings.Builder
+		msgTitle.WriteString(strconv.Itoa(month))
+		msgTitle.WriteString("月總結")
+		return msgTitle.String()
+	}(), structs.SummaryFlexMsg{
+		StartDate:     dateFormat.StartDate,
+		EndDate:       dateFormat.EndDate,
+		BalanceObjs:   balanceObjs,
+		TotalExpenses: balanceSum.TotalExpense,
+		TotalBalance:  balanceSum.TotalBalance,
+	})
+
 }

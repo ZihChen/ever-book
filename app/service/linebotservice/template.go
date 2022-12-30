@@ -245,3 +245,29 @@ func (s *service) ShowMemberListOption(users []model.User) *linebot.TemplateMess
 		}(),
 	})
 }
+
+func (s *service) ShowMembersBalanceMonthOption(memberID string) (template *linebot.TemplateMessage) {
+	var carouselColumn []*linebot.CarouselColumn
+	var monthsArr []int
+	nowMonth := time.Now().Month()
+	monthsArr = append(monthsArr, int(nowMonth))
+	for i := 1; i <= 2; i++ {
+		month := time.Now().AddDate(0, -i, 0).Month()
+		monthsArr = append(monthsArr, int(month))
+	}
+	var actions []linebot.TemplateAction
+	for _, month := range monthsArr {
+		actions = append(actions, &linebot.PostbackAction{
+			Label: helper.MonthConvertToZhTw(month),
+			Text:  helper.MonthConvertToZhTw(month),
+			Data:  fmt.Sprintf("check-balance-month-%s-%s", strconv.Itoa(month), memberID),
+		})
+	}
+	carouselColumn = append(carouselColumn, &linebot.CarouselColumn{
+		Text:    global.BalanceMonthOptionZhTw,
+		Actions: actions,
+	})
+	return linebot.NewTemplateMessage(global.BalanceMonthOptionZhTw, &linebot.CarouselTemplate{
+		Columns: carouselColumn,
+	})
+}
