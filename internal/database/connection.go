@@ -2,6 +2,7 @@ package database
 
 import (
 	"ever-book/app/global/errorcode"
+	"ever-book/app/global/settings"
 	"ever-book/app/model"
 	"fmt"
 	"gorm.io/driver/mysql"
@@ -29,7 +30,7 @@ func (db *instance) GetConnection() *gorm.DB {
 		return connectPool
 	}
 
-	connectPool, err = gorm.Open(mysql.Open("root:root@tcp(ever-book-db:3306)/everbook?timeout=5s&charset=utf8mb4&parseTime=True&loc=Local"), &gorm.Config{
+	connectPool, err = gorm.Open(mysql.Open(getDSN()), &gorm.Config{
 		DisableForeignKeyConstraintWhenMigrating: true,
 	})
 	if err != nil {
@@ -70,4 +71,13 @@ func (db *instance) AutoMigrate() {
 	if err != nil {
 		log.Fatalf(errorcode.AutoMigrateError, err.Error())
 	}
+}
+
+func getDSN() string {
+	Host := settings.Config.DBConfig.Host
+	Username := settings.Config.DBConfig.Username
+	Password := settings.Config.DBConfig.Password
+	Database := settings.Config.DBConfig.Database
+
+	return fmt.Sprintf("%s:%s@tcp(%s:3306)/%s?timeout=5s&charset=utf8mb4&parseTime=True&loc=Local", Username, Password, Host, Database)
 }

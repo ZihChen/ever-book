@@ -20,7 +20,7 @@ func Run() {
 	router.Load(r)
 
 	srv := http.Server{
-		Addr:         ":8888",
+		Addr:         ":8083",
 		Handler:      r,
 		ReadTimeout:  60 * time.Second,
 		WriteTimeout: 60 * time.Second,

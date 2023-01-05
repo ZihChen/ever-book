@@ -6,7 +6,7 @@ services:
       context: .
     container_name: ${PROJECT_NAME}
     ports:
-      - 8888:8888
+      - 8083:8083
     restart: always
     environment:
       - ENV=${ENV}

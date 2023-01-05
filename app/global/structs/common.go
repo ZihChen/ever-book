@@ -1,10 +1,12 @@
 package structs
 
-type Balance struct {
-	Date    string `json:"date"`
-	Type    string `json:"type"`
-	Item    string `json:"item"`
-	Amount  int    `json:"amount"`
-	Payment string `json:"payment"`
-	Remark  string `json:"remark"`
+type EnvConfig struct {
+	DBConfig DBConfig `yaml:"db_config"`
+}
+
+type DBConfig struct {
+	Host     string `yaml:"host"`
+	Username string `yaml:"username"`
+	Password string `yaml:"password"`
+	Database string `yaml:"database"`
 }
