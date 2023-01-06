@@ -172,3 +172,8 @@ const (
 	MomBudget int = 45000
 	DadBudget int = 20000
 )
+
+const (
+	UsersNotFoundMsg   string = "沒有其他使用者可以綁定！"
+	MembersNotFoundMsg string = "沒有其他成員可以查看！"
+)

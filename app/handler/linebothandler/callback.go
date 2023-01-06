@@ -167,11 +167,21 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 			// 綁定家庭帳本成員
 			case global.BindOtherBalance:
 				userList := h.UserService.GetUserList(user.ID)
+				if len(userList) == 0 {
+					template := linebot.NewTextMessage(global.UsersNotFoundMsg)
+					h.replyMessageToUser(event.ReplyToken, template)
+					return
+				}
 				template := h.LineBotService.ShowUserListOption(userList)
 				h.replyMessageToUser(event.ReplyToken, template)
 				return
 			// 選擇要查看的成員帳本
 			case global.CheckOtherBalance:
+				if len(user.Members) == 0 {
+					template := linebot.NewTextMessage(global.MembersNotFoundMsg)
+					h.replyMessageToUser(event.ReplyToken, template)
+					return
+				}
 				template := h.LineBotService.ShowMemberListOption(user.Members)
 				h.replyMessageToUser(event.ReplyToken, template)
 				return
