@@ -5,6 +5,7 @@ import (
 	"ever-book/app/global/helper"
 	"ever-book/app/global/structs"
 	"ever-book/app/repository/dailybalancerepo"
+	"ever-book/app/repository/userrepo"
 	"fmt"
 	"sync"
 )
@@ -18,6 +19,7 @@ type Interface interface {
 }
 type service struct {
 	DailyBalanceRepo dailybalancerepo.Interface
+	UserRepo         userrepo.Interface
 }
 
 var singleton *service
@@ -27,6 +29,7 @@ func New() Interface {
 	once.Do(func() {
 		singleton = &service{
 			DailyBalanceRepo: dailybalancerepo.New(),
+			UserRepo:         userrepo.New(),
 		}
 	})
 	return singleton
@@ -80,11 +83,12 @@ func (s *service) GetDailyBalancesByMonth(userID int, month int) (balanceObjs []
 }
 
 func (s *service) GetTotalBalanceByMonth(userID int, month int) (balanceSum structs.BalanceSummaryObj) {
+	user := s.UserRepo.GetUserByID(userID)
 	totalExpense := s.DailyBalanceRepo.GetTotalAmountByDateInterval(userID, global.Expense, helper.GetIntervalDate(month))
 	totalIncome := s.DailyBalanceRepo.GetTotalAmountByDateInterval(userID, global.Income, helper.GetIntervalDate(month))
 
 	return structs.BalanceSummaryObj{
 		TotalExpense: totalExpense,
-		TotalBalance: global.MomBudget + totalIncome - totalExpense,
+		TotalBalance: user.Budget + totalIncome - totalExpense,
 	}
 }

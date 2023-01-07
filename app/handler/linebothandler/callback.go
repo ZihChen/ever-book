@@ -4,6 +4,7 @@ import (
 	"ever-book/app/global"
 	"ever-book/app/global/helper"
 	"ever-book/app/global/structs"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 	"log"
@@ -21,13 +22,20 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 	}
 	for _, event := range events {
 		sourceID := event.Source.UserID
-		user := h.UserService.GetOrCreateUser(structs.UserFields{
-			UUID: sourceID,
-			Name: func() string {
-				profile, _ := bot.GetProfile(sourceID).Do()
-				return profile.DisplayName
-			}(),
-		})
+		user := h.UserService.GetUserInfo(sourceID)
+		if user.ID == 0 {
+			h.UserService.CreateUser(structs.UserFields{
+				UUID: sourceID,
+				Name: func() string {
+					profile, _ := bot.GetProfile(sourceID).Do()
+					return profile.DisplayName
+				}(),
+			})
+			// 首次登入使用必須先填寫每月預算
+			budgetMsg := linebot.NewTextMessage("請輸入每月預算金額：")
+			h.replyMessageToUser(event.ReplyToken, budgetMsg)
+			return
+		}
 
 		switch event.Type {
 		// Postback Type
@@ -191,12 +199,25 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 		case linebot.EventTypeMessage:
 			switch message := event.Message.(type) {
 			case *linebot.TextMessage:
+				intText, err := strconv.Atoi(message.Text)
+				// 設置每月預算
+				if user.Budget == 0 && err == nil {
+					h.UserService.UpdateUser(structs.UpdateUserFields{
+						ID:     user.ID,
+						Column: global.UserBudget,
+						Value:  intText,
+					})
+
+					setBudgetMsg := linebot.NewTextMessage(fmt.Sprintf("您的每月預算為：%d", intText))
+					h.replyMessageToUser(event.ReplyToken, setBudgetMsg)
+					return
+				}
+
 				// 紀錄金額
-				balanceAmount, err := strconv.Atoi(message.Text)
 				if err == nil {
 					h.TmpBalanceService.CreateTemporaryBalance(structs.CreateTmpBalanceFields{
 						UserID: user.ID,
-						Amount: balanceAmount,
+						Amount: intText,
 						Date:   helper.GetNowDate(),
 					})
 					template := h.LineBotService.ShowBalanceItemOptionTemplate()

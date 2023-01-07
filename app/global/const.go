@@ -138,6 +138,13 @@ const (
 	TemporaryBalanceDate    TemporaryBalanceColumn = "date"
 )
 
+type UserColumn string
+
+const (
+	UserName   UserColumn = "name"
+	UserBudget UserColumn = "budget"
+)
+
 const (
 	JanZhTw string = "一月"
 	FebZhTw string = "二月"
@@ -166,11 +173,6 @@ const (
 	OctSummary string = "october_sum"
 	NovSummary string = "november_sum"
 	DecSummary string = "december_sum"
-)
-
-const (
-	MomBudget int = 45000
-	DadBudget int = 20000
 )
 
 const (

@@ -66,3 +66,9 @@ type UserObj struct {
 	ID   int    `json:"id"`
 	Name string `json:"name"`
 }
+
+type UpdateUserFields struct {
+	ID     int               `json:"id"`
+	Column global.UserColumn `json:"column"`
+	Value  interface{}       `json:"value"`
+}

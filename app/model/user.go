@@ -8,6 +8,7 @@ type User struct {
 	ID               int                `json:"id" gorm:"column:id;type:int(11);primary_key"`
 	UUID             string             `json:"uuid" gorm:"column:uuid;type:varchar(100);not null"`
 	Name             string             `json:"name" gorm:"column:name;type:varchar(50);not null"`
+	Budget           int                `json:"budget" gorm:"column:budget;type:int(20)"`
 	TemporaryBalance []TemporaryBalance `json:"temporary_balance" gorm:"foreignKey:UserID"`
 	Members          []User             `gorm:"many2many:user_members"`
 	CreatedAt        time.Time          `json:"created_at" gorm:"column:created_at;type:timestamp; default:current_timestamp"`
