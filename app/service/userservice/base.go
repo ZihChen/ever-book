@@ -9,8 +9,10 @@ import (
 )
 
 type Interface interface {
-	GetOrCreateUser(userFields structs.UserFields) (user model.User)
 	GetUserList(userID int) (userList []structs.UserObj)
+	GetUserInfo(uuid string) (user model.User)
+	CreateUser(userFields structs.UserFields)
+	UpdateUser(fields structs.UpdateUserFields)
 }
 
 type service struct {
@@ -29,16 +31,6 @@ func New() Interface {
 	return singleton
 }
 
-func (s *service) GetOrCreateUser(userFields structs.UserFields) (user model.User) {
-	user = s.UserRepo.GetUserByUUID(userFields.UUID)
-	if user.ID != 0 {
-		return
-	}
-	s.UserRepo.CreateUserByMap(helper.StructToMap(userFields))
-	user = s.UserRepo.GetUserByUUID(userFields.UUID)
-	return
-}
-
 func (s *service) GetUserList(userID int) (userList []structs.UserObj) {
 	users := s.UserRepo.GetUserList()
 	for _, user := range users {
@@ -50,4 +42,17 @@ func (s *service) GetUserList(userID int) (userList []structs.UserObj) {
 		}
 	}
 	return
+}
+
+func (s *service) GetUserInfo(uuid string) (user model.User) {
+	user = s.UserRepo.GetUserByUUID(uuid)
+	return
+}
+
+func (s *service) CreateUser(userFields structs.UserFields) {
+	s.UserRepo.CreateUserByMap(helper.StructToMap(userFields))
+}
+
+func (s *service) UpdateUser(fields structs.UpdateUserFields) {
+	s.UserRepo.UpdateUserByID(fields.ID, fields.Column, fields.Value)
 }

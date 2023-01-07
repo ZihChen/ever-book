@@ -1,6 +1,7 @@
 package userrepo
 
 import (
+	"ever-book/app/global"
 	"ever-book/app/model"
 	"ever-book/internal/database"
 	"log"
@@ -12,6 +13,7 @@ type Interface interface {
 	GetUserByUUID(uuid string) (user model.User)
 	GetUserList() (users []model.User)
 	CreateUserByMap(userMap map[string]interface{})
+	UpdateUserByID(id int, column global.UserColumn, value interface{})
 }
 
 type repository struct {
@@ -68,4 +70,13 @@ func (r *repository) GetUserByID(id int) (user model.User) {
 	}
 
 	return
+}
+
+func (r *repository) UpdateUserByID(id int, column global.UserColumn, value interface{}) {
+	db := r.DB.GetConnection()
+
+	if err := db.Model(&model.User{}).Where("id = ?", id).
+		Update(string(column), value).Error; err != nil {
+		log.Fatalf("Update User By ID Error:%v", err.Error())
+	}
 }
