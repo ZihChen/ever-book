@@ -70,7 +70,7 @@ func (s *service) GetDailyBalancesByMonth(userID int, month int) (balanceObjs []
 			ID: dailyBalance.ID,
 			Date: func() string {
 				dateTime := dailyBalance.Date
-				return fmt.Sprintf("%02d-%02d-%02d", dateTime.Year(), dateTime.Month(), dateTime.Day())
+				return fmt.Sprintf("%02d-%02d", dateTime.Month(), dateTime.Day())
 			}(),
 			Type:    dailyBalance.Type,
 			Item:    dailyBalance.Item,
