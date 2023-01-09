@@ -345,37 +345,65 @@ func (s *service) ShowSummaryFlexMessage(msgTitle string, summaryFlexMsg structs
 		Type:   linebot.FlexComponentTypeBox,
 		Layout: linebot.FlexBoxLayoutTypeHorizontal,
 		Contents: []linebot.FlexComponent{
-			&linebot.TextComponent{
-				Type:   linebot.FlexComponentTypeText,
-				Text:   "日期",
-				Size:   linebot.FlexTextSizeTypeSm,
-				Color:  "#555555",
-				Weight: linebot.FlexTextWeightTypeBold,
-				Align:  linebot.FlexComponentAlignTypeCenter,
+			&linebot.BoxComponent{
+				Type:   linebot.FlexComponentTypeBox,
+				Layout: linebot.FlexBoxLayoutTypeHorizontal,
+				Contents: []linebot.FlexComponent{
+					&linebot.BoxComponent{
+						Type:   linebot.FlexComponentTypeBox,
+						Layout: linebot.FlexBoxLayoutTypeHorizontal,
+						Contents: []linebot.FlexComponent{
+							&linebot.TextComponent{
+								Type:   linebot.FlexComponentTypeText,
+								Text:   "日期",
+								Size:   linebot.FlexTextSizeTypeXs,
+								Color:  "#555555",
+								Weight: linebot.FlexTextWeightTypeBold,
+								Align:  linebot.FlexComponentAlignTypeCenter,
+								Flex:   linebot.IntPtr(1),
+							},
+							&linebot.TextComponent{
+								Type:   linebot.FlexComponentTypeText,
+								Text:   "花費",
+								Size:   linebot.FlexTextSizeTypeXs,
+								Color:  "#555555",
+								Weight: linebot.FlexTextWeightTypeBold,
+								Align:  linebot.FlexComponentAlignTypeCenter,
+								Flex:   linebot.IntPtr(1),
+							},
+						},
+					},
+					&linebot.BoxComponent{
+						Type:   linebot.FlexComponentTypeBox,
+						Layout: linebot.FlexBoxLayoutTypeHorizontal,
+						Contents: []linebot.FlexComponent{
+							&linebot.TextComponent{
+								Type:   linebot.FlexComponentTypeText,
+								Text:   "項目",
+								Size:   linebot.FlexTextSizeTypeXs,
+								Color:  "#555555",
+								Weight: linebot.FlexTextWeightTypeBold,
+								Align:  linebot.FlexComponentAlignTypeCenter,
+								Flex:   linebot.IntPtr(1),
+							},
+						},
+					},
+				},
 			},
-			&linebot.TextComponent{
-				Type:   linebot.FlexComponentTypeText,
-				Text:   "項目",
-				Size:   linebot.FlexTextSizeTypeSm,
-				Color:  "#555555",
-				Weight: linebot.FlexTextWeightTypeBold,
-				Align:  linebot.FlexComponentAlignTypeCenter,
-			},
-			&linebot.TextComponent{
-				Type:   linebot.FlexComponentTypeText,
-				Text:   "花費",
-				Size:   linebot.FlexTextSizeTypeSm,
-				Color:  "#555555",
-				Weight: linebot.FlexTextWeightTypeBold,
-				Align:  linebot.FlexComponentAlignTypeCenter,
-			},
-			&linebot.TextComponent{
-				Type:   linebot.FlexComponentTypeText,
-				Text:   "備註",
-				Size:   linebot.FlexTextSizeTypeSm,
-				Color:  "#555555",
-				Weight: linebot.FlexTextWeightTypeBold,
-				Align:  linebot.FlexComponentAlignTypeCenter,
+			&linebot.BoxComponent{
+				Type:   linebot.FlexComponentTypeBox,
+				Layout: linebot.FlexBoxLayoutTypeHorizontal,
+				Contents: []linebot.FlexComponent{
+					&linebot.TextComponent{
+						Type:   linebot.FlexComponentTypeText,
+						Text:   "備註",
+						Size:   linebot.FlexTextSizeTypeXs,
+						Color:  "#555555",
+						Weight: linebot.FlexTextWeightTypeBold,
+						Align:  linebot.FlexComponentAlignTypeCenter,
+						Flex:   linebot.IntPtr(1),
+					},
+				},
 			},
 		},
 	})
@@ -385,51 +413,75 @@ func (s *service) ShowSummaryFlexMessage(msgTitle string, summaryFlexMsg structs
 			Type:   linebot.FlexComponentTypeBox,
 			Layout: linebot.FlexBoxLayoutTypeHorizontal,
 			Contents: []linebot.FlexComponent{
-				&linebot.TextComponent{
-					Type:   linebot.FlexComponentTypeText,
-					Text:   BalanceObj.Date,
-					Size:   linebot.FlexTextSizeTypeXxs,
-					Color:  "#555555",
-					Weight: linebot.FlexTextWeightTypeBold,
-					Align:  linebot.FlexComponentAlignTypeCenter,
+				&linebot.BoxComponent{
+					Type:   linebot.FlexComponentTypeBox,
+					Layout: linebot.FlexBoxLayoutTypeHorizontal,
+					Contents: []linebot.FlexComponent{
+						&linebot.BoxComponent{
+							Type:   linebot.FlexComponentTypeBox,
+							Layout: linebot.FlexBoxLayoutTypeHorizontal,
+							Contents: []linebot.FlexComponent{
+								&linebot.TextComponent{
+									Type:  linebot.FlexComponentTypeText,
+									Text:  BalanceObj.Date,
+									Size:  linebot.FlexTextSizeTypeXs,
+									Color: "#555555",
+									Align: linebot.FlexComponentAlignTypeCenter,
+									Flex:  linebot.IntPtr(1),
+								},
+								&linebot.TextComponent{
+									Type: linebot.FlexComponentTypeText,
+									Text: func() (amount string) {
+										amount = strconv.Itoa(BalanceObj.Amount)
+										if BalanceObj.Type == global.Income {
+											var balanceAmount strings.Builder
+											balanceAmount.WriteString("+")
+											balanceAmount.WriteString(amount)
+											return balanceAmount.String()
+										}
+										return
+									}(),
+									Size:  linebot.FlexTextSizeTypeXs,
+									Color: "#555555",
+									Align: linebot.FlexComponentAlignTypeCenter,
+									Flex:  linebot.IntPtr(1),
+								},
+							},
+						},
+						&linebot.BoxComponent{
+							Type:   linebot.FlexComponentTypeBox,
+							Layout: linebot.FlexBoxLayoutTypeHorizontal,
+							Contents: []linebot.FlexComponent{
+								&linebot.TextComponent{
+									Type:  linebot.FlexComponentTypeText,
+									Text:  helper.KeyNameConvertToZhTw(BalanceObj.Item),
+									Size:  linebot.FlexTextSizeTypeXs,
+									Color: "#555555",
+									Align: linebot.FlexComponentAlignTypeCenter,
+									Flex:  linebot.IntPtr(1),
+								},
+							},
+						},
+					},
 				},
-				&linebot.TextComponent{
-					Type:   linebot.FlexComponentTypeText,
-					Text:   helper.KeyNameConvertToZhTw(BalanceObj.Item),
-					Size:   linebot.FlexTextSizeTypeXxs,
-					Color:  "#555555",
-					Weight: linebot.FlexTextWeightTypeBold,
-					Align:  linebot.FlexComponentAlignTypeCenter,
-				},
-				&linebot.TextComponent{
-					Type: linebot.FlexComponentTypeText,
-					Text: func() (amount string) {
-						amount = strconv.Itoa(BalanceObj.Amount)
-						if BalanceObj.Type == global.Income {
-							var balanceAmount strings.Builder
-							balanceAmount.WriteString("+")
-							balanceAmount.WriteString(amount)
-							return balanceAmount.String()
-						}
-						return
-					}(),
-					Size:   linebot.FlexTextSizeTypeXxs,
-					Color:  "#555555",
-					Weight: linebot.FlexTextWeightTypeBold,
-					Align:  linebot.FlexComponentAlignTypeCenter,
-				},
-				&linebot.TextComponent{
-					Type: linebot.FlexComponentTypeText,
-					Text: func() string {
-						if BalanceObj.Remark == "" {
-							return "-"
-						}
-						return BalanceObj.Remark
-					}(),
-					Size:   linebot.FlexTextSizeTypeXxs,
-					Color:  "#555555",
-					Weight: linebot.FlexTextWeightTypeBold,
-					Align:  linebot.FlexComponentAlignTypeCenter,
+				&linebot.BoxComponent{
+					Type:   linebot.FlexComponentTypeBox,
+					Layout: linebot.FlexBoxLayoutTypeHorizontal,
+					Contents: []linebot.FlexComponent{
+						&linebot.TextComponent{
+							Type: linebot.FlexComponentTypeText,
+							Text: func() string {
+								if BalanceObj.Remark == "" {
+									return "-"
+								}
+								return BalanceObj.Remark
+							}(),
+							Size:  linebot.FlexTextSizeTypeXs,
+							Color: "#555555",
+							Align: linebot.FlexComponentAlignTypeCenter,
+							Flex:  linebot.IntPtr(1),
+						},
+					},
 				},
 			},
 		})
