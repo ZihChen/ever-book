@@ -79,7 +79,7 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 			// 選擇消費種類
 			case global.ConsumeGoods, global.Fruit, global.WaterBill, global.OilFee, global.Breakfast, global.Lunch, global.Dinner, global.RepairReward, global.GasFee,
 				global.Insurance, global.LivingExpenses, global.OrganicFood, global.DressFee, global.HealthyFood, global.AutomaticDeduction, global.ElectricBill, global.Fish,
-				global.Medical, global.Ticket, global.Gardening, global.GroceryShopping, global.EasyCard, global.ManagementCost, global.PayBill, global.Salary, global.OtherIncome:
+				global.Medical, global.Ticket, global.Gardening, global.GroceryShopping, global.EasyCard, global.ManagementCost, global.PayBill, global.Salary, global.OtherIncome, global.OtherExpense, global.TelephoneFee:
 				h.TmpBalanceService.UpdateTemporaryBalance(structs.UpdateTmpBalanceFields{
 					UserID: user.ID,
 					Column: global.TemporaryBalanceItem,
@@ -263,7 +263,7 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 					global.HealthyFoodZhTw, global.AutomaticDeductionZhTw, global.ElectricBillZhTw, global.FishZhTW, global.MedicalZhTw, global.TicketZhTw, global.GardeningZhTw, global.GroceryShoppingZhTw,
 					global.EasyCardZhTw, global.ManagementCostZhTw, global.PayBillZhTw, global.PottedPlantZhTw, global.ContinueZhTw, global.DiscardZhTw, global.NeedRemarkZhTw, global.SkipRemarkZhTw, global.ConfirmZhTw, global.CancelZhTw,
 					global.JanZhTw, global.FebZhTw, global.MarZhTw, global.AprZhTw, global.MayZhTw, global.JunZhTw, global.JulZhTw, global.AugZhTw, global.SepZhTw, global.OctZhTw, global.NovZhTw, global.DecZhTw, global.TypeDateZhTw, global.TypeRemarkZhTw,
-					global.BindOtherBalanceZhTw:
+					global.BindOtherBalanceZhTw, global.TelephoneFeeZhTw, global.OtherExpenseZhTw:
 					// 避免觸發寫入備註
 					return
 				default:
