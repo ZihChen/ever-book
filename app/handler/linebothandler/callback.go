@@ -252,19 +252,13 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 				case global.DeletePreviousRecordZhTw:
 					balance, exist := h.DailyBalanceService.GetLatestDailyBalance(user.ID)
 					if !exist {
-						// TODO: 回傳沒有資料可以刪除
+						template := linebot.NewTextMessage(global.BalanceDataNotFoundMsg)
+						h.replyMessageToUser(event.ReplyToken, template)
+						return
 					}
 					cancelTemplate := h.LineBotService.ShowCancelBalanceFlexMessage("您要刪除下列資料:", balance)
 					cancelOption := h.LineBotService.ShowCancelOrNotOptionTemplate()
 					h.replyMessageToUser(event.ReplyToken, cancelTemplate, cancelOption)
-					return
-				case global.TodayZhTw, global.IncomeZhTw, global.ExpenseZhTw, global.CashZhTw, global.CreditCardZhTw, global.ConsumeGoodsZhTw, global.FruitZhTw, global.WaterBillZhTw, global.OilFeeZhTw,
-					global.BreakfastZhTw, global.LunchZhTw, global.DinnerZhTw, global.RepairRewardZhTw, global.GasFeeZhTw, global.InsuranceZhTw, global.LivingExpensesZhTw, global.OrganicFoodZhTw, global.DressFeeZhTw,
-					global.HealthyFoodZhTw, global.AutomaticDeductionZhTw, global.ElectricBillZhTw, global.FishZhTW, global.MedicalZhTw, global.TicketZhTw, global.GardeningZhTw, global.GroceryShoppingZhTw,
-					global.EasyCardZhTw, global.ManagementCostZhTw, global.PayBillZhTw, global.PottedPlantZhTw, global.ContinueZhTw, global.DiscardZhTw, global.NeedRemarkZhTw, global.SkipRemarkZhTw, global.ConfirmZhTw, global.CancelZhTw,
-					global.JanZhTw, global.FebZhTw, global.MarZhTw, global.AprZhTw, global.MayZhTw, global.JunZhTw, global.JulZhTw, global.AugZhTw, global.SepZhTw, global.OctZhTw, global.NovZhTw, global.DecZhTw, global.TypeDateZhTw, global.TypeRemarkZhTw,
-					global.BindOtherBalanceZhTw, global.TelephoneFeeZhTw, global.OtherExpenseZhTw:
-					// 避免觸發寫入備註
 					return
 				default:
 					tmpRecord, exist := h.TmpBalanceService.GetTemporaryBalanceByUserID(user.ID)

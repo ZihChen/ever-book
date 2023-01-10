@@ -180,6 +180,7 @@ const (
 )
 
 const (
-	UsersNotFoundMsg   string = "沒有其他使用者可以綁定！"
-	MembersNotFoundMsg string = "沒有其他成員可以查看！"
+	BalanceDataNotFoundMsg string = "沒有資料可以刪除！"
+	UsersNotFoundMsg       string = "沒有其他使用者可以綁定！"
+	MembersNotFoundMsg     string = "沒有其他成員可以查看！"
 )
