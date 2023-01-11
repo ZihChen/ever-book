@@ -83,7 +83,9 @@ func (s *service) GetDailyBalancesByMonth(userID int, month int) (balanceObjs []
 }
 
 func (s *service) GetTotalBalanceByMonth(userID int, month int) (balanceSum structs.BalanceSummaryObj) {
-	user := s.UserRepo.GetUserByID(userID)
+	user := s.UserRepo.GetUserInfo(structs.UserParams{
+		ID: userID,
+	})
 	totalExpense := s.DailyBalanceRepo.GetTotalAmountByDateInterval(userID, global.Expense, helper.GetIntervalDate(month))
 	totalIncome := s.DailyBalanceRepo.GetTotalAmountByDateInterval(userID, global.Income, helper.GetIntervalDate(month))
 

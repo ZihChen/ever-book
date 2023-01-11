@@ -1,6 +1,7 @@
 package usermemberservice
 
 import (
+	"ever-book/app/global/structs"
 	"ever-book/app/model"
 	"ever-book/app/repository/usermemberrepo"
 	"ever-book/app/repository/userrepo"
@@ -31,7 +32,9 @@ func New() Interface {
 
 func (s *service) BindUserMember(user model.User, memberId int) {
 	var members []model.User
-	member := s.UserRepo.GetUserByID(memberId)
+	member := s.UserRepo.GetUserInfo(structs.UserParams{
+		ID: memberId,
+	})
 	members = append(user.Members, member)
 	s.UserMapRepo.CreateUserMembersRelation(user, members)
 }
