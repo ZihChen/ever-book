@@ -29,6 +29,16 @@ type TmpBalanceObj struct {
 	Remark  string `json:"remark"`
 }
 
+type ShowBalanceObj struct {
+	Date       string `json:"date"`
+	Type       string `json:"type"`
+	Item       string `json:"item"`
+	Amount     string `json:"amount"`
+	Proportion string `json:"proportion"`
+	Payment    string `json:"payment"`
+	Remark     string `json:"remark"`
+}
+
 type BalanceObj struct {
 	ID      int    `json:"id"`
 	Date    string `json:"date"`

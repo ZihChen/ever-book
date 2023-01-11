@@ -28,7 +28,7 @@ type Interface interface {
 	// ShowCancelOrNotOptionTemplate 確認是否刪除選項視窗
 	ShowCancelOrNotOptionTemplate() *linebot.TemplateMessage
 	// ShowTmpBalanceFlexMessage 顯示編輯當下的收支紀錄訊息
-	ShowTmpBalanceFlexMessage(msgTitle string, tmpBalanceObj structs.TmpBalanceObj) *linebot.FlexMessage
+	ShowTmpBalanceFlexMessage(msgTitle string, balanceObj structs.ShowBalanceObj) *linebot.FlexMessage
 	// ShowCancelBalanceFlexMessage 顯示即將刪除的收支紀錄訊息
 	ShowCancelBalanceFlexMessage(msgTitle string, tmpBalanceObj structs.TmpBalanceObj) *linebot.FlexMessage
 	// ShowMonthOptionTemplate 顯示含當月及過去兩個月的月份選項視窗

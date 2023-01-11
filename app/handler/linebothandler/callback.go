@@ -133,7 +133,7 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 				h.DailyBalanceService.CreateDailyBalanceByTmpBalance(user.ID, tmpBalance)
 				// 將暫存紀錄刪除
 				h.TmpBalanceService.DeleteTemporaryBalance(user.ID)
-				balanceFlexMsg := h.LineBotService.ShowTmpBalanceFlexMessage(global.SuccessRecordZhTw, tmpBalance)
+				balanceFlexMsg := h.LineBotService.ShowTmpBalanceFlexMessage(global.SuccessRecordZhTw, showDataFormat(tmpBalance, user.Budget))
 				h.replyMessageToUser(event.ReplyToken, balanceFlexMsg)
 				return
 			case global.NeedRemark, global.TypeRemark:
@@ -146,7 +146,7 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 				h.DailyBalanceService.CreateDailyBalanceByTmpBalance(user.ID, tmpRecord)
 				// 將暫存紀錄刪除
 				h.TmpBalanceService.DeleteTemporaryBalance(user.ID)
-				balanceFlexMsg := h.LineBotService.ShowTmpBalanceFlexMessage(global.SuccessRecordZhTw, tmpRecord)
+				balanceFlexMsg := h.LineBotService.ShowTmpBalanceFlexMessage(global.SuccessRecordZhTw, showDataFormat(tmpRecord, user.Budget))
 				h.replyMessageToUser(event.ReplyToken, balanceFlexMsg)
 				return
 			case global.Continue:
@@ -226,12 +226,20 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 				}
 
 				switch message.Text {
+				case global.TodayZhTw, global.IncomeZhTw, global.ExpenseZhTw, global.CashZhTw, global.CreditCardZhTw, global.ConsumeGoodsZhTw, global.FruitZhTw, global.WaterBillZhTw, global.OilFeeZhTw,
+					global.BreakfastZhTw, global.LunchZhTw, global.DinnerZhTw, global.RepairRewardZhTw, global.GasFeeZhTw, global.InsuranceZhTw, global.LivingExpensesZhTw, global.OrganicFoodZhTw, global.DressFeeZhTw,
+					global.HealthyFoodZhTw, global.AutomaticDeductionZhTw, global.ElectricBillZhTw, global.FishZhTW, global.MedicalZhTw, global.TicketZhTw, global.GardeningZhTw, global.GroceryShoppingZhTw,
+					global.EasyCardZhTw, global.ManagementCostZhTw, global.PayBillZhTw, global.PottedPlantZhTw, global.ContinueZhTw, global.DiscardZhTw, global.NeedRemarkZhTw, global.SkipRemarkZhTw, global.ConfirmZhTw, global.CancelZhTw,
+					global.JanZhTw, global.FebZhTw, global.MarZhTw, global.AprZhTw, global.MayZhTw, global.JunZhTw, global.JulZhTw, global.AugZhTw, global.SepZhTw, global.OctZhTw, global.NovZhTw, global.DecZhTw, global.TypeDateZhTw, global.TypeRemarkZhTw,
+					global.BindOtherBalanceZhTw, global.TelephoneFeeZhTw, global.OtherExpenseZhTw:
+					// 避免觸發寫入備註
+					return
 				// 記帳起始步驟
 				case global.RecordBalanceZhTw:
 					tmpRecord, exist := h.TmpBalanceService.GetTemporaryBalanceByUserID(user.ID)
 					// 如果此用戶已經存在一筆暫存紀錄，則詢問是否繼續步驟
 					if exist {
-						tmpBalanceFlexMsg := h.LineBotService.ShowTmpBalanceFlexMessage(global.UnfinishedBalanceZhTw, tmpRecord)
+						tmpBalanceFlexMsg := h.LineBotService.ShowTmpBalanceFlexMessage(global.UnfinishedBalanceZhTw, showDataFormat(tmpRecord, user.Budget))
 						isContinueTemplate := h.LineBotService.ShowContinueOrDiscardOptionTemplate()
 						h.replyMessageToUser(event.ReplyToken, tmpBalanceFlexMsg, isContinueTemplate)
 					} else {
@@ -291,11 +299,56 @@ func (h *Handler) LineBotCallBack(ctx *gin.Context) {
 					h.DailyBalanceService.CreateDailyBalanceByTmpBalance(user.ID, tmpRecord)
 					// 將暫存紀錄刪除
 					h.TmpBalanceService.DeleteTemporaryBalance(user.ID)
-					balanceFlexMsg := h.LineBotService.ShowTmpBalanceFlexMessage(global.SuccessRecordZhTw, tmpRecord)
+					balanceFlexMsg := h.LineBotService.ShowTmpBalanceFlexMessage(global.SuccessRecordZhTw, showDataFormat(tmpRecord, user.Budget))
 					h.replyMessageToUser(event.ReplyToken, balanceFlexMsg)
 				}
 			}
 		}
+	}
+}
+
+func showDataFormat(tmpObj structs.TmpBalanceObj, budget int) structs.ShowBalanceObj {
+	return structs.ShowBalanceObj{
+		Date: tmpObj.Date,
+		Type: func() string {
+			if tmpObj.Type == "" {
+				return "-"
+			}
+			return helper.KeyNameConvertToZhTw(tmpObj.Type)
+		}(),
+		Item: func() string {
+			if tmpObj.Item == "" {
+				return "-"
+			}
+			return helper.KeyNameConvertToZhTw(tmpObj.Item)
+		}(),
+		Amount: func() string {
+			if tmpObj.Amount == 0 {
+				return "0"
+			}
+			return strconv.Itoa(tmpObj.Amount)
+		}(),
+		Proportion: func() string {
+			if tmpObj.Amount == 0 || budget == 0 {
+				return "0.0%"
+			}
+			var proportion strings.Builder
+			proportion.WriteString(fmt.Sprintf("%.2f", (float64(tmpObj.Amount)/float64(budget))*100))
+			proportion.WriteString("％")
+			return proportion.String()
+		}(),
+		Payment: func() string {
+			if tmpObj.Payment == "" {
+				return "-"
+			}
+			return helper.KeyNameConvertToZhTw(tmpObj.Payment)
+		}(),
+		Remark: func() string {
+			if tmpObj.Remark == "" {
+				return "-"
+			}
+			return tmpObj.Remark
+		}(),
 	}
 }
 

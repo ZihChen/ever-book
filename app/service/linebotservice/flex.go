@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func (s *service) ShowTmpBalanceFlexMessage(msgTitle string, tmpBalanceObj structs.TmpBalanceObj) *linebot.FlexMessage {
+func (s *service) ShowTmpBalanceFlexMessage(msgTitle string, balanceObj structs.ShowBalanceObj) *linebot.FlexMessage {
 	return linebot.NewFlexMessage(msgTitle, &linebot.BubbleContainer{
 		Body: &linebot.BoxComponent{
 			Type:   linebot.FlexComponentTypeBox,
@@ -40,7 +40,7 @@ func (s *service) ShowTmpBalanceFlexMessage(msgTitle string, tmpBalanceObj struc
 								},
 								&linebot.TextComponent{
 									Type:  linebot.FlexComponentTypeText,
-									Text:  tmpBalanceObj.Date,
+									Text:  balanceObj.Date,
 									Size:  linebot.FlexTextSizeTypeSm,
 									Color: "#111111",
 									Align: linebot.FlexComponentAlignTypeEnd,
@@ -58,13 +58,8 @@ func (s *service) ShowTmpBalanceFlexMessage(msgTitle string, tmpBalanceObj struc
 									Color: "#555555",
 								},
 								&linebot.TextComponent{
-									Type: linebot.FlexComponentTypeText,
-									Text: func() string {
-										if tmpBalanceObj.Type == "" {
-											return "-"
-										}
-										return helper.KeyNameConvertToZhTw(tmpBalanceObj.Type)
-									}(),
+									Type:  linebot.FlexComponentTypeText,
+									Text:  balanceObj.Type,
 									Size:  linebot.FlexTextSizeTypeSm,
 									Color: "#111111",
 									Align: linebot.FlexComponentAlignTypeEnd,
@@ -82,13 +77,8 @@ func (s *service) ShowTmpBalanceFlexMessage(msgTitle string, tmpBalanceObj struc
 									Color: "#555555",
 								},
 								&linebot.TextComponent{
-									Type: linebot.FlexComponentTypeText,
-									Text: func() string {
-										if tmpBalanceObj.Item == "" {
-											return "-"
-										}
-										return helper.KeyNameConvertToZhTw(tmpBalanceObj.Item)
-									}(),
+									Type:  linebot.FlexComponentTypeText,
+									Text:  balanceObj.Item,
 									Size:  linebot.FlexTextSizeTypeSm,
 									Color: "#111111",
 									Align: linebot.FlexComponentAlignTypeEnd,
@@ -106,13 +96,27 @@ func (s *service) ShowTmpBalanceFlexMessage(msgTitle string, tmpBalanceObj struc
 									Color: "#555555",
 								},
 								&linebot.TextComponent{
-									Type: linebot.FlexComponentTypeText,
-									Text: func() string {
-										if tmpBalanceObj.Amount == 0 {
-											return "-"
-										}
-										return strconv.Itoa(tmpBalanceObj.Amount)
-									}(),
+									Type:  linebot.FlexComponentTypeText,
+									Text:  balanceObj.Amount,
+									Size:  linebot.FlexTextSizeTypeSm,
+									Color: "#111111",
+									Align: linebot.FlexComponentAlignTypeEnd,
+								},
+							},
+						},
+						&linebot.BoxComponent{
+							Type:   linebot.FlexComponentTypeBox,
+							Layout: linebot.FlexBoxLayoutTypeHorizontal,
+							Contents: []linebot.FlexComponent{
+								&linebot.TextComponent{
+									Type:  linebot.FlexComponentTypeText,
+									Text:  "占比",
+									Size:  linebot.FlexTextSizeTypeSm,
+									Color: "#555555",
+								},
+								&linebot.TextComponent{
+									Type:  linebot.FlexComponentTypeText,
+									Text:  balanceObj.Proportion,
 									Size:  linebot.FlexTextSizeTypeSm,
 									Color: "#111111",
 									Align: linebot.FlexComponentAlignTypeEnd,
@@ -130,13 +134,8 @@ func (s *service) ShowTmpBalanceFlexMessage(msgTitle string, tmpBalanceObj struc
 									Color: "#555555",
 								},
 								&linebot.TextComponent{
-									Type: linebot.FlexComponentTypeText,
-									Text: func() string {
-										if tmpBalanceObj.Payment == "" {
-											return "-"
-										}
-										return helper.KeyNameConvertToZhTw(tmpBalanceObj.Payment)
-									}(),
+									Type:  linebot.FlexComponentTypeText,
+									Text:  balanceObj.Payment,
 									Size:  linebot.FlexTextSizeTypeSm,
 									Color: "#111111",
 									Align: linebot.FlexComponentAlignTypeEnd,
@@ -154,13 +153,8 @@ func (s *service) ShowTmpBalanceFlexMessage(msgTitle string, tmpBalanceObj struc
 									Color: "#555555",
 								},
 								&linebot.TextComponent{
-									Type: linebot.FlexComponentTypeText,
-									Text: func() string {
-										if tmpBalanceObj.Remark == "" {
-											return "-"
-										}
-										return tmpBalanceObj.Remark
-									}(),
+									Type:  linebot.FlexComponentTypeText,
+									Text:  balanceObj.Remark,
 									Size:  linebot.FlexTextSizeTypeSm,
 									Color: "#111111",
 									Align: linebot.FlexComponentAlignTypeEnd,
