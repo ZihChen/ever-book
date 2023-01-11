@@ -2,38 +2,48 @@ package global
 
 var BalanceItems map[string][]string = map[string][]string{
 	"支出-日常": {
-		"日用品",
-		"生活費",
-		"加油",
+		LivingExpensesZhTw,
+		ConsumeGoodsZhTw,
+		OilFeeZhTw,
+	},
+	"支出-菜市場": {
+		GroceryShoppingZhTw,
+		FishZhTW,
+		FruitZhTw,
 	},
 	"支出-外食": {
-		"早餐",
-		"午餐",
-		"晚餐",
+		BreakfastZhTw,
+		LunchZhTw,
+		DinnerZhTw,
 	},
 	"支出-繳費": {
-		"水費",
-		"電費",
-		"瓦斯費",
+		WaterBillZhTw,
+		ElectricBillZhTw,
+		GasFeeZhTw,
 	},
 	"支出-繳費2": {
-		"管理費",
-		"保險費",
-		"帳簿自動扣款",
-	},
-	"收入-其他": {
-		"其他收入",
-		"外修費",
-		"薪水",
+		TelephoneFeeZhTw,
+		ManagementCostZhTw,
+		InsuranceZhTw,
 	},
 	"支出-其他": {
-		"買車票",
-		"悠遊卡儲值",
-		"衣服",
+		TicketZhTw,
+		EasyCardZhTw,
+		DressFeeZhTw,
 	},
 	"支出-其他2": {
-		"有機食品",
-		"園藝",
-		"醫療",
+		AutomaticDeductionZhTw,
+		OtherExpenseZhTw,
+		PayBillZhTw,
+	},
+	"支出-其他3": {
+		OrganicFoodZhTw,
+		GardeningZhTw,
+		MedicalZhTw,
+	},
+	"收入-其他": {
+		OtherIncomeZhTw,
+		RepairRewardZhTw,
+		SalaryZhTw,
 	},
 }

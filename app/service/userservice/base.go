@@ -45,7 +45,9 @@ func (s *service) GetUserList(userID int) (userList []structs.UserObj) {
 }
 
 func (s *service) GetUserInfo(uuid string) (user model.User) {
-	user = s.UserRepo.GetUserByUUID(uuid)
+	user = s.UserRepo.GetUserInfo(structs.UserParams{
+		UUID: uuid,
+	})
 	return
 }
 

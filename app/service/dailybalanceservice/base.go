@@ -70,7 +70,7 @@ func (s *service) GetDailyBalancesByMonth(userID int, month int) (balanceObjs []
 			ID: dailyBalance.ID,
 			Date: func() string {
 				dateTime := dailyBalance.Date
-				return fmt.Sprintf("%02d-%02d-%02d", dateTime.Year(), dateTime.Month(), dateTime.Day())
+				return fmt.Sprintf("%02d", dateTime.Day())
 			}(),
 			Type:    dailyBalance.Type,
 			Item:    dailyBalance.Item,
@@ -83,7 +83,9 @@ func (s *service) GetDailyBalancesByMonth(userID int, month int) (balanceObjs []
 }
 
 func (s *service) GetTotalBalanceByMonth(userID int, month int) (balanceSum structs.BalanceSummaryObj) {
-	user := s.UserRepo.GetUserByID(userID)
+	user := s.UserRepo.GetUserInfo(structs.UserParams{
+		ID: userID,
+	})
 	totalExpense := s.DailyBalanceRepo.GetTotalAmountByDateInterval(userID, global.Expense, helper.GetIntervalDate(month))
 	totalIncome := s.DailyBalanceRepo.GetTotalAmountByDateInterval(userID, global.Income, helper.GetIntervalDate(month))
 

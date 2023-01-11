@@ -50,6 +50,8 @@ const (
 	TypeRemark         string = "type_remark"
 	CheckOtherBalance  string = "check_other_balance"
 	BindOtherBalance   string = "bind_other_balance"
+	TelephoneFee       string = "telephone_fee"
+	OtherExpense       string = "other_expense"
 )
 
 const (
@@ -84,6 +86,8 @@ const (
 	FishZhTW                      string = "魚"
 	MedicalZhTw                   string = "醫療"
 	TicketZhTw                    string = "買車票"
+	TelephoneFeeZhTw              string = "電話費"
+	OtherExpenseZhTw              string = "其他支出"
 	GardeningZhTw                 string = "園藝"
 	GroceryShoppingZhTw           string = "買菜"
 	EasyCardZhTw                  string = "悠遊卡儲值"
@@ -176,6 +180,7 @@ const (
 )
 
 const (
-	UsersNotFoundMsg   string = "沒有其他使用者可以綁定！"
-	MembersNotFoundMsg string = "沒有其他成員可以查看！"
+	BalanceDataNotFoundMsg string = "沒有資料可以刪除！"
+	UsersNotFoundMsg       string = "沒有其他使用者可以綁定！"
+	MembersNotFoundMsg     string = "沒有其他成員可以查看！"
 )

@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 	"log"
 	"time"
 )
@@ -32,6 +33,7 @@ func (db *instance) GetConnection() *gorm.DB {
 
 	connectPool, err = gorm.Open(mysql.Open(getDSN()), &gorm.Config{
 		DisableForeignKeyConstraintWhenMigrating: true,
+		Logger:                                   logger.Default.LogMode(logger.Info),
 	})
 	if err != nil {
 		log.Fatalf(errorcode.CheckDBConnectError, err.Error())
